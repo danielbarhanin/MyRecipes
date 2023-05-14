@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    // Add recipe
+    <string name="enter_recipe_name">הכנס את שם המתכון</string>
+    <string name="add_ingredients">הוסף מצרכים</string>
+    <string name="add_instructions">הוסף הוראות הכנה</string>
+    <string name="add_link">קישור למתכון</string>
+    <string name="upload">העלאת מתכון</string>
+    <string name="enter_ingredient">הזן מצרך וכמות</string>
+
+    // Home page
+    <string name="my_recipes">המתכונים שלי</string>
+    <string name="search_bar">חפש</string>
+
+    // Update recipe
+    <string name="update_recipe_name">עדכן את שם המתכון</string>
+    <string name="update_ingredients">עדכן מצרכים</string>
+    <string name="update_instructions">עדכן הוראות הכנה</string>
+    <string name="update">עדכן מתכון</string>
+
+    // Recipe page
+    <string name="instructions">הוראות הכנה:</string>
+    <string name="ingredients">מצרכים:</string>
+
+    // Delete alert
+    <string name="delete_alert_title">מחיקת %1$s</string>
+    <string name="delete_alert_body">האם אתה בטוח שברצונך למחוק את %1$s?</string>
+    <string name="delete_alert_positive_button">כן</string>
+    <string name="delete_alert_negative_button">לא</string>
+
+    // Toasts
+    <string name="toast_added_successfully">המתכון נוסף בהצלחה</string>
+    <string name="toast_updated_successfully">המתכון עודכן בהצלחה</string>
+    <string name="toast_deleted_successfully">%1$s נמחק בהצלחה</string>
+    <string name="toast_please_fill">נא הזמן %1$s</string>
+    <string name="missing_recipe_name">את שם המתכון</string>
+    <string name="missing_ingreideints">לפחות מצרך אחד</string>
+    <string name="missing_instructions">את הוראות ההכנה</string>
+
+</resources>

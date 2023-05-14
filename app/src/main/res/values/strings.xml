@@ -1,0 +1,42 @@
+<resources>
+    <string name="app_name" translatable="false">My Recipes</string>
+
+    // Add recipe
+    <string name="enter_recipe_name">Enter recipe\'s name</string>
+    <string name="add_ingredients">Add ingredients</string>
+    <string name="add_instructions">Add cooking instructions</string>
+    <string name="add_link">Link to recipe</string>
+    <string name="upload">Upload Recipe</string>
+    <string name="enter_ingredient">Enter name and amount</string>
+
+    // Update recipe
+    <string name="update_recipe_name">Update recipe\'s name</string>
+    <string name="update_ingredients">Update ingredients</string>
+    <string name="update_instructions">Update cooking instructions</string>
+    <string name="update">Update Recipe</string>
+
+    // Home page
+    <string name="my_recipes">My Recipes</string>
+    <string name="search_bar">Search</string>
+
+    // Recipe page
+    <string name="instructions">Cooking Instructions:</string>
+    <string name="ingredients">Ingredients:</string>
+
+    // Delete alert
+    <string name="delete_alert_title">Delete %1$s</string>
+    <string name="delete_alert_body">Are you sure you want to delete %1$s?</string>
+    <string name="delete_alert_positive_button">Yes</string>
+    <string name="delete_alert_negative_button">No</string>
+
+    // Toasts
+    <string name="toast_added_successfully">Recipe was added Successfully</string>
+    <string name="toast_updated_successfully">Recipe was updated successfully</string>
+    <string name="toast_deleted_successfully">%1$s was deleted Successfully</string>
+    <string name="toast_please_fill">Please Fill %1$s</string>
+    <string name="missing_recipe_name">recipe\'s Name</string>
+    <string name="missing_ingreideints">At least one ingredient</string>
+    <string name="missing_instructions">instructions</string>
+
+
+</resources>

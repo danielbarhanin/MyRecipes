@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="app/src/main/res/drawable/bg_edit_text.xml" value="0.1795" />
+        <entry key="app/src/main/res/drawable/bg_ingredient_item.xml" value="0.1565" />
+        <entry key="app/src/main/res/drawable/bg_next_button.xml" value="0.1565" />
+        <entry key="app/src/main/res/drawable/bg_next_button_pressed.xml" value="0.195" />
+        <entry key="app/src/main/res/drawable/bg_next_button_unpressed.xml" value="0.1565" />
+        <entry key="app/src/main/res/drawable/bg_recipe_item.xml" value="0.1795" />
+        <entry key="app/src/main/res/drawable/bg_recipe_name.xml" value="0.1565" />
+        <entry key="app/src/main/res/drawable/bg_search_bar.xml" value="0.1795" />
+        <entry key="app/src/main/res/drawable/ic_add_ingredient.xml" value="0.1975" />
+        <entry key="app/src/main/res/drawable/ic_back.xml" value="0.1795" />
+        <entry key="app/src/main/res/drawable/ic_chef.xml" value="0.2565" />
+        <entry key="app/src/main/res/drawable/ic_edit.xml" value="0.1795" />
+        <entry key="app/src/main/res/drawable/ic_exit.xml" value="0.196" />
+        <entry key="app/src/main/res/drawable/ic_ingredient.xml" value="0.195" />
+        <entry key="app/src/main/res/drawable/ic_minus.xml" value="0.1795" />
+        <entry key="app/src/main/res/drawable/ic_plus.xml" value="0.1795" />
+        <entry key="app/src/main/res/drawable/ic_url_link.xml" value="0.19" />
+        <entry key="app/src/main/res/drawable/ingriedintets_container.xml" value="0.195" />
+        <entry key="app/src/main/res/drawable/main_activity.xml" value="0.1565" />
+        <entry key="app/src/main/res/drawable/progress_bar.xml" value="0.19" />
+        <entry key="app/src/main/res/drawable/progress_bar_horizontal.xml" value="0.189" />
+        <entry key="app/src/main/res/font/gilory.xml" value="0.27936670071501535" />
+        <entry key="app/src/main/res/layout/activity_add_recipe.xml" value="0.24635416666666668" />
+        <entry key="app/src/main/res/layout/add_ingredients.xml" value="0.3493988037109375" />
+        <entry key="app/src/main/res/layout/add_instructions.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/add_recipe_name.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/fragment_add_recipe.xml" value="0.31846710205078127" />
+        <entry key="app/src/main/res/layout/fragment_recipe.xml" value="0.24739583333333334" />
+        <entry key="app/src/main/res/layout/fragment_recipe_link_webview.xml" value="0.5825688680013021" />
+        <entry key="app/src/main/res/layout/fragment_recipe_page.xml" value="0.5" />
+        <entry key="app/src/main/res/layout/fragment_recipes.xml" value="0.24739583333333334" />
+        <entry key="app/src/main/res/layout/fragment_update_recipe.xml" value="0.28321329752604174" />
+        <entry key="app/src/main/res/layout/ingredient_edit_item.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/ingredient_item.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/ingredients_container.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/instructions_item.xml" value="0.26666666666666666" />
+        <entry key="app/src/main/res/layout/link_item.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/main_activity.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/recipe.xml" value="0.2547525024414063" />
+        <entry key="app/src/main/res/layout/recipe_item.xml" value="0.45" />
+        <entry key="app/src/main/res/layout/recipe_link_webview.xml" value="0.36350250244140625" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2565" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2565" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
