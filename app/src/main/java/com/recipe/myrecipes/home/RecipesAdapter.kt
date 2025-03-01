@@ -49,7 +49,7 @@ class RecipesAdapter(var onDeleteRecipeCallback: ((Recipe) -> Unit), var onChang
             recipeName.text = recipe.name
 
             deleteButton.setOnClickListener {
-                onDeleteRecipeCallback.invoke(recipe)
+              onDeleteRecipeCallback.invoke(recipe)
             }
 
             recipeRow.setOnClickListener {

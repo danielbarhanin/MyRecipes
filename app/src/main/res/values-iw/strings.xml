@@ -33,9 +33,14 @@
     <string name="toast_added_successfully">המתכון נוסף בהצלחה</string>
     <string name="toast_updated_successfully">המתכון עודכן בהצלחה</string>
     <string name="toast_deleted_successfully">%1$s נמחק בהצלחה</string>
-    <string name="toast_please_fill">נא הזמן %1$s</string>
+    <string name="toast_error">משהו השתבש: %1$s, נסה שנית </string>
+    <string name="toast_please_fill">נא הזן %1$s</string>
     <string name="missing_recipe_name">את שם המתכון</string>
     <string name="missing_ingreideints">לפחות מצרך אחד</string>
     <string name="missing_instructions">את הוראות ההכנה</string>
+
+    // Login Screen
+    <string name="login">התחבר</string>
+    <string name="login_error">משהו השתבש, נסה שנית</string>
 
 </resources>

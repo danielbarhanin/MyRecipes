@@ -2,23 +2,19 @@ package com.recipe.myrecipes.data
 
 import android.content.Context
 import android.os.Parcelable
-import androidx.room.Entity
-import androidx.room.PrimaryKey
 import com.recipe.myrecipes.R
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "recipe_table")
 data class Recipe(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int,
+    val id: String,
     val ingredients: List<String>,
     val name: String,
     val instructions: String,
     val urlLink: String,
-    val view_order: Int = 0,
+    val viewOrder: Int = 0,
 
-): Parcelable {
+    ): Parcelable {
 
     fun getRecipeString(context: Context): String {
         return "*${name}*\n\n" +

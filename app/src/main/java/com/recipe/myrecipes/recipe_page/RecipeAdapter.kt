@@ -3,7 +3,6 @@ package com.recipe.myrecipes.recipe_page
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.navigation.findNavController

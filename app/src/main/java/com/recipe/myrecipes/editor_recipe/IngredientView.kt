@@ -1,4 +1,4 @@
-package com.recipe.myrecipes.add_recipe
+package com.recipe.myrecipes.editor_recipe
 
 import android.content.Context
 import android.view.LayoutInflater

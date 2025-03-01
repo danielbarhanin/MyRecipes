@@ -24,9 +24,9 @@
         android:layout_marginHorizontal="50dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/bg_search_bar"
-        android:padding="10dp"
         android:hint="@string/search_bar"
         android:imeOptions="actionNext"
+        android:padding="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/title" />
@@ -39,9 +39,9 @@
         android:layout_marginTop="25dp"
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/searchBar" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -52,9 +52,9 @@
         android:backgroundTint="#C4AEAD"
         android:elevation="0dp"
         android:focusable="true"
-        app:borderWidth="0dp"
-        android:tint="@color/white"
         android:src="@drawable/ic_plus"
+        android:tint="@color/white"
+        app:borderWidth="0dp"
         app:fabCustomSize="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

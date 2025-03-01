@@ -33,10 +33,18 @@
     <string name="toast_added_successfully">Recipe was added Successfully</string>
     <string name="toast_updated_successfully">Recipe was updated successfully</string>
     <string name="toast_deleted_successfully">%1$s was deleted Successfully</string>
+    <string name="toast_error">An Error occurred: %1$s, try again</string>
     <string name="toast_please_fill">Please Fill %1$s</string>
     <string name="missing_recipe_name">recipe\'s Name</string>
     <string name="missing_ingreideints">At least one ingredient</string>
     <string name="missing_instructions">instructions</string>
+
+    // Google Auth
+    <string name="default_web_client_id" translatable="false">455518764193-b2jmg9grnvafgthd0fkhbqjnetftn2bf.apps.googleusercontent.com</string>
+
+    // Login Screen
+    <string name="login">Login</string>
+    <string name="login_error">Something went wrong, try again</string>
 
 
 </resources>

@@ -17,7 +17,7 @@
     </fragment>
     <fragment
         android:id="@+id/addRecipeFragment"
-        android:name="com.recipe.myrecipes.add_recipe.AddRecipeFragment"
+        android:name="com.recipe.myrecipes.editor_recipe.AddRecipeFragment"
         android:label="AddRecipeFragment" >
         <action
             android:id="@+id/action_addRecipeFragment_to_recipesFragment"
@@ -53,7 +53,7 @@
     </fragment>
     <fragment
         android:id="@+id/updateRecipeFragment"
-        android:name="com.recipe.myrecipes.update_recipe.UpdateRecipeFragment"
+        android:name="com.recipe.myrecipes.editor_recipe.UpdateRecipeFragment"
         android:label="UpdateRecipeFragment" >
         <action
             android:id="@+id/action_updateRecipeFragment_to_recipePageFragment"
@@ -61,5 +61,17 @@
         <argument
             android:name="recipe"
             app:argType="com.recipe.myrecipes.data.Recipe" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.recipe.myrecipes.login.LoginFragment"
+        android:label="LoginFragment" >
+        <action
+            android:id="@+id/action_loginFragment_to_recipesFragment"
+            app:destination="@id/recipesFragment" />
+        <argument
+            android:name="userId"
+            app:argType="string"
+            android:defaultValue="" />
     </fragment>
 </navigation>

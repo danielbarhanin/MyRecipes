@@ -2,7 +2,6 @@ package com.recipe.myrecipes.home
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Parcelable
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -24,7 +23,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.recipe.myrecipes.R
 import com.recipe.myrecipes.data.Recipe
 import com.recipe.myrecipes.data.RecipeViewModel
-import org.json.JSONArray
 
 const val LAST_VIEW_ORDER = "lastViewOrder"
 const val LAST_SCROLL_POSITION = "lastScrollPosition"
@@ -99,8 +97,9 @@ class RecipesFragment: Fragment() {
             }
         )
         recipesAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
-        recipeViewModel.readAllData.observe(viewLifecycleOwner, Observer { recipes ->
-            recipesAdapter.setData(recipes.sortedBy { it.view_order })
+
+        recipeViewModel.getRecipes().observe(viewLifecycleOwner, Observer { recipes ->
+            recipesAdapter.setData(recipes.sortedBy { it.viewOrder })
             recipesRecyclerView.adapter = recipesAdapter
         })
 
@@ -113,15 +112,23 @@ class RecipesFragment: Fragment() {
         addRecipeButton = findViewById(R.id.addRecipeButton)
     }
 
-    private var state: Parcelable? = null
-
     override fun onPause() {
         super.onPause()
-        val v: View = recipesRecyclerView.getChildAt(0)
-        top = v.top - recipesRecyclerView.paddingTop
-        activity?.getPreferences(Context.MODE_PRIVATE)?.edit { putInt(LAST_SCROLL_POSITION, lastScrollPosition) }
-        activity?.getPreferences(Context.MODE_PRIVATE)?.edit { putInt(TOP_RECYCLER, top) }
+        if (recipesRecyclerView.childCount > 0) {
+            val v: View = recipesRecyclerView.getChildAt(0)
+            top = v.top - recipesRecyclerView.paddingTop
+            activity?.getPreferences(Context.MODE_PRIVATE)
+                ?.edit { putInt(LAST_SCROLL_POSITION, lastScrollPosition) }
+            activity?.getPreferences(Context.MODE_PRIVATE)?.edit { putInt(TOP_RECYCLER, top) }
+        }
+    }
 
+    override fun onResume() {
+        super.onResume()
+        recipeViewModel.recipes.observe(viewLifecycleOwner, Observer { recipes ->
+            recipesAdapter.setData(recipes.sortedBy { it.viewOrder })
+            recipesRecyclerView.adapter = recipesAdapter
+        })
     }
 
     private fun createItemTouchHelper(): ItemTouchHelper {
@@ -145,18 +152,26 @@ class RecipesFragment: Fragment() {
     }
 
     private fun filterData(query: String) {
-        recipeViewModel.readAllData.value?.let {
+        recipeViewModel.recipes.value?.let {
             recipesAdapter.setData(
                 it.filter { query.lowercase() in it.name.lowercase() }
             )
         }
     }
 
+    private fun deleteRecipe(recipe: Recipe) {
+        val mTask = recipeViewModel.deleteRecipe(recipe)
+        mTask.addOnSuccessListener {
+            Toast.makeText(requireContext(), String.format(getString(R.string.toast_deleted_successfully), recipe.name), Toast.LENGTH_LONG).show()
+        }.addOnFailureListener {error ->
+            Toast.makeText(requireContext(), String.format(getString(R.string.toast_error), error.message), Toast.LENGTH_LONG).show()
+        }
+    }
+
     private fun showDeleteRecipeAlert(recipe: Recipe) {
         val builder = AlertDialog.Builder(requireContext()).apply {
             setPositiveButton(getString(R.string.delete_alert_positive_button)) { _, _ ->
-                recipeViewModel.deleteRecipe(recipe)
-                Toast.makeText(requireContext(), String.format(getString(R.string.toast_deleted_successfully), recipe.name), Toast.LENGTH_LONG).show()
+                deleteRecipe(recipe)
             }
             setNegativeButton(R.string.delete_alert_negative_button) { _, _ ->
 
@@ -179,63 +194,4 @@ class RecipesFragment: Fragment() {
             }
         }
     }
-
-//    private fun fromDbToJson() {
-//        val json = JsonArray()
-//        recipeViewModel.readAllData.value?.forEach {
-//                val recipeObject = JsonObject()
-//                recipeObject.addProperty("name", it.name)
-//                recipeObject.addProperty("id", it.id)
-//                recipeObject.addProperty("view_order", it.view_order)
-//                recipeObject.addProperty("urlLink" ,it.urlLink)
-//                recipeObject.addProperty("instructions", it.instructions)
-//                val jsonArray = JsonArray()
-//                it.ingredients.forEach { ingredient ->
-//                    jsonArray.add(ingredient)
-//                }
-//                recipeObject.add("ingredients", jsonArray)
-//                json.add(recipeObject)
-//            }
-//
-//        val jsonFinal = JsonObject()
-//        jsonFinal.add("recipes", json)
-//
-//        val file = File(requireContext().filesDir, "db_json.json")
-//        val fileWriter = FileWriter(file)
-//        val bufferedWriter = BufferedWriter(fileWriter)
-//        bufferedWriter.write(jsonFinal.toString())
-//        bufferedWriter.close()
-//    }
-
-//    private fun fromJsonToDb() {
-//        val jsonString = requireContext().assets.open("db_json.json")
-//            .bufferedReader()
-//            .use { it.readText() }
-//
-//        val jsonObject = JSONObject(jsonString)
-//        val recipes = jsonObject.getJSONArray("recipes")
-//        for (i in 0 until recipes.length()) {
-//            val recipe = recipes.getJSONObject(i)
-//            val id = recipe.getInt("id")
-//            val name = recipe.getString("name")
-//            val viewOrder = recipe.getInt("view_order")
-//            val link = recipe.getString("urlLink")
-//            val instructions = recipe.getString("instructions")
-//            val ingredients = fromJsonArrayToIngredientsList(recipe.getJSONArray("ingredients"))
-//
-//            recipeViewModel.addRecipe(
-//                Recipe(id, ingredients, name, instructions, link, viewOrder)
-//            )
-//        }
-//    }
-
-    private fun fromJsonArrayToIngredientsList(jsonArray: JSONArray) : List<String> {
-        val list = mutableListOf<String>()
-        for (i in 0 until jsonArray.length()) {
-            list.add(jsonArray.get(i) as String)
-        }
-
-        return list
-    }
-
 }
