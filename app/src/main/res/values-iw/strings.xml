@@ -19,6 +19,7 @@
     <string name="category_soups">מרקים</string>
     <string name="category_main_course">מנות עיקריות</string>
     <string name="category_desserts">קינוחים</string>
+    <string name="category_explore">גלה עוד</string>
     <string name="select_category">בחר קטגוריה</string>
 
     // Update recipe

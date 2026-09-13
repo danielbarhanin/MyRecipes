@@ -17,7 +17,7 @@
         app:srcCompat="@drawable/ic_exit" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/editButton"
+        android:id="@+id/shareButton"
         android:layout_width="28dp"
         android:layout_height="28dp"
         android:layout_marginTop="20dp"
@@ -25,18 +25,18 @@
         android:padding="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_edit" />
+        app:srcCompat="@drawable/ic_share" />
 
     <androidx.appcompat.widget.AppCompatImageView
-        android:id="@+id/shareButton"
-        android:layout_width="26dp"
-        android:layout_height="26dp"
+        android:id="@+id/editButton"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
         android:layout_marginEnd="16dp"
         android:padding="2dp"
-        app:layout_constraintBottom_toBottomOf="@id/editButton"
-        app:layout_constraintEnd_toStartOf="@+id/editButton"
-        app:layout_constraintTop_toTopOf="@id/editButton"
-        app:srcCompat="@drawable/ic_share" />
+        app:layout_constraintBottom_toBottomOf="@id/shareButton"
+        app:layout_constraintEnd_toStartOf="@+id/shareButton"
+        app:layout_constraintTop_toTopOf="@id/shareButton"
+        app:srcCompat="@drawable/ic_edit" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/recipeName"

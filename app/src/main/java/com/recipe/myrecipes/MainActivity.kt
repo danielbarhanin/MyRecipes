@@ -34,6 +34,9 @@ class MainActivity: AppCompatActivity() {
 
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
+        // Reset tab to "All" when app is restarted fresh
+        getPreferences(Context.MODE_PRIVATE)?.edit { putString("lastSelectedTab", "ALL_KEY") }
+
         if (FirebaseApp.getApps(this).isEmpty()) {
             FirebaseApp.initializeApp(
                 this,
@@ -66,5 +69,6 @@ class MainActivity: AppCompatActivity() {
 
         getPreferences(Context.MODE_PRIVATE)?.edit { putInt(LAST_SCROLL_POSITION, 0) }
         getPreferences(Context.MODE_PRIVATE)?.edit { putInt(TOP_RECYCLER, -1) }
+        getPreferences(Context.MODE_PRIVATE)?.edit { putString("lastSelectedTab", "ALL_KEY") }
     }
 }

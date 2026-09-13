@@ -59,9 +59,15 @@ class RecipePageFragment: Fragment() {
             findNavController().navigate(R.id.action_fragmentRecipe_to_recipesFragment)
         }
 
-        editButton.setOnClickListener {
-            val action = RecipePageFragmentDirections.actionRecipePageFragmentToUpdateRecipeFragment(args.recipeItems)
-            findNavController().navigate(action)
+        if (args.recipeItems.isReadOnly) {
+            editButton.visibility = View.GONE
+            editButton.setOnClickListener(null)
+        } else {
+            editButton.visibility = View.VISIBLE
+            editButton.setOnClickListener {
+                val action = RecipePageFragmentDirections.actionRecipePageFragmentToUpdateRecipeFragment(args.recipeItems)
+                findNavController().navigate(action)
+            }
         }
 
         shareButton.setOnClickListener { shareRecipe() }

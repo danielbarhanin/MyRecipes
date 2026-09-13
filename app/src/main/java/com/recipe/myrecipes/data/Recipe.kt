@@ -27,7 +27,8 @@ data class Recipe(
     val instructions: String,
     val urlLink: String,
     val viewOrder: Int = 0,
-    val category: String = Category.MAIN_COURSE.name
+    val category: String = Category.MAIN_COURSE.name,
+    val isReadOnly: Boolean = false
 ): Parcelable {
 
     fun getCategoryEnum(): Category {

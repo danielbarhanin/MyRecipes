@@ -31,12 +31,14 @@ import com.recipe.myrecipes.data.RecipeViewModel
 const val LAST_VIEW_ORDER = "lastViewOrder"
 const val LAST_SCROLL_POSITION = "lastScrollPosition"
 const val TOP_RECYCLER = "topRecycler"
+const val LAST_SELECTED_TAB = "lastSelectedTab"
 
 class RecipesFragment: Fragment() {
 
     private lateinit var  recipeViewModel: RecipeViewModel
 
     private lateinit var logoutButton: AppCompatImageView
+    private lateinit var homeButton: AppCompatImageView
     private lateinit var searchBar: AppCompatEditText
     private lateinit var categoryTabLayout: TabLayout
     private lateinit var recipesRecyclerView: RecyclerView
@@ -119,15 +121,27 @@ class RecipesFragment: Fragment() {
             showLogoutConfirmationDialog()
         }
 
+        homeButton.setOnClickListener {
+            selectedCategoryTag = null
+            searchBar.setText("")
+            val firstTab = categoryTabLayout.getTabAt(0)
+            if (firstTab != null) {
+                firstTab.select()
+            }
+            filterData("")
+        }
+
         recipeViewModel.getRecipes().observe(viewLifecycleOwner) {
             filterData(searchBar.text?.toString() ?: "")
         }
-
-        createItemTouchHelper().attachToRecyclerView(recipesRecyclerView)
+        recipeViewModel.getExploreRecipes().observe(viewLifecycleOwner) {
+            filterData(searchBar.text?.toString() ?: "")
+        }
     }
 
     private fun View.initViews() {
         logoutButton = findViewById(R.id.logoutButton)
+        homeButton = findViewById(R.id.homeButton)
         searchBar = findViewById(R.id.searchBar)
         categoryTabLayout = findViewById(R.id.categoryTabLayout)
         recipesRecyclerView = findViewById(R.id.recipesRecyclerView)
@@ -146,6 +160,10 @@ class RecipesFragment: Fragment() {
             categoryTabLayout.addTab(tab)
         }
 
+        val exploreTab = categoryTabLayout.newTab().setText(R.string.category_explore)
+        exploreTab.tag = "EXPLORE"
+        categoryTabLayout.addTab(exploreTab)
+
         categoryTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 selectedCategoryTag = tab?.tag as? String
@@ -153,12 +171,36 @@ class RecipesFragment: Fragment() {
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
-            override fun onTabReselected(tab: TabLayout.Tab?) {}
+
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+                selectedCategoryTag = tab?.tag as? String
+                filterData(searchBar.text?.toString() ?: "")
+            }
         })
+
+        val savedTabTag = activity?.getPreferences(Context.MODE_PRIVATE)?.getString(LAST_SELECTED_TAB, null)
+        if (savedTabTag != null) {
+            for (i in 0 until categoryTabLayout.tabCount) {
+                val tab = categoryTabLayout.getTabAt(i)
+                val tag = tab?.tag as? String
+                val matches = if (savedTabTag == "ALL_KEY") tag == null else tag == savedTabTag
+                if (matches) {
+                    selectedCategoryTag = tag
+                    categoryTabLayout.post {
+                        tab?.select()
+                        categoryTabLayout.setScrollPosition(i, 0f, true)
+                    }
+                    break
+                }
+            }
+        }
     }
 
     override fun onPause() {
         super.onPause()
+        activity?.getPreferences(Context.MODE_PRIVATE)?.edit {
+            putString(LAST_SELECTED_TAB, selectedCategoryTag ?: "ALL_KEY")
+        }
         if (recipesRecyclerView.childCount > 0) {
             val v: View = recipesRecyclerView.getChildAt(0)
             top = v.top - recipesRecyclerView.paddingTop
@@ -195,13 +237,33 @@ class RecipesFragment: Fragment() {
     }
 
     private fun filterData(query: String = searchBar.text?.toString() ?: "") {
-        recipeViewModel.recipes.value?.let { list ->
-            val filtered = list.filter { recipe ->
-                val matchesCategory = selectedCategoryTag == null || recipe.category.equals(selectedCategoryTag, ignoreCase = true)
-                val matchesQuery = query.isBlank() || query.lowercase() in recipe.name.lowercase()
-                matchesCategory && matchesQuery
+        if (selectedCategoryTag == "EXPLORE") {
+            recipeViewModel.exploreRecipes.value?.let { exploreList ->
+                val filtered = exploreList.filter { recipe ->
+                    query.isBlank() || query.lowercase() in recipe.name.lowercase()
+                }
+
+                val items = mutableListOf<HomeListItem>()
+                for (cat in Category.entries) {
+                    val catRecipes = filtered.filter { it.getCategoryEnum() == cat }
+                    if (catRecipes.isNotEmpty()) {
+                        items.add(HomeListItem.Header(cat.stringResId))
+                        catRecipes.forEach { recipe ->
+                            items.add(HomeListItem.RecipeItem(recipe))
+                        }
+                    }
+                }
+                recipesAdapter.setItems(items)
             }
-            recipesAdapter.setData(filtered.sortedBy { it.viewOrder })
+        } else {
+            recipeViewModel.recipes.value?.let { list ->
+                val filtered = list.filter { recipe ->
+                    val matchesCategory = selectedCategoryTag == null || recipe.category.equals(selectedCategoryTag, ignoreCase = true)
+                    val matchesQuery = query.isBlank() || query.lowercase() in recipe.name.lowercase()
+                    matchesCategory && matchesQuery
+                }
+                recipesAdapter.setItems(filtered.sortedBy { it.viewOrder }.map { HomeListItem.RecipeItem(it) })
+            }
         }
     }
 

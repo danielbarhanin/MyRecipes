@@ -16,6 +16,7 @@ import java.util.UUID
 
 class RecipeViewModel: ViewModel() {
     val recipes: MutableLiveData<List<Recipe>> = MutableLiveData<List<Recipe>>()
+    val exploreRecipes: MutableLiveData<List<Recipe>> = MutableLiveData<List<Recipe>>()
 
     val database = FirebaseDatabase.getInstance(DATABASE_URL_TEST)
 
@@ -67,6 +68,55 @@ class RecipeViewModel: ViewModel() {
            }
        )
        return recipes
+   }
+
+   fun getExploreRecipes(): LiveData<List<Recipe>> {
+       database.getReference(ROOT)
+           .addValueEventListener(object : ValueEventListener {
+               override fun onDataChange(dataSnapshot: DataSnapshot) {
+                   if (dataSnapshot.exists()) {
+                       val myRecipeIds = recipes.value?.map { it.id }?.toSet() ?: emptySet()
+                       val myRecipeNames = recipes.value?.map { it.name.trim().lowercase() }?.toSet() ?: emptySet()
+
+                       val exploreList: MutableList<Recipe> = mutableListOf()
+                       for (userSnapshot in dataSnapshot.children) {
+                           val otherUserId = userSnapshot.key
+                           if (otherUserId != null && otherUserId != userId) {
+                               for (recipeData in userSnapshot.children) {
+                                   val id = recipeData.key ?: UUID.randomUUID().toString()
+                                   val name = recipeData.child(NAME).getValue<String>() ?: ""
+
+                                   if (id !in myRecipeIds && name.trim().lowercase() !in myRecipeNames) {
+                                       exploreList.add(
+                                           Recipe(
+                                               id = id,
+                                               ingredients = recipeData.child(INGREDIENTS).getValue<List<String>>() ?: listOf(),
+                                               name = name,
+                                               instructions = recipeData.child(INSTRUCTIONS).getValue<String>() ?: "",
+                                               urlLink = recipeData.child(URL_LINK).getValue<String>() ?: "",
+                                               viewOrder = recipeData.child(VIEW_ORDER).getValue<Int>() ?: 0,
+                                               category = recipeData.child(CATEGORY).getValue<String>() ?: Category.MAIN_COURSE.name,
+                                               isReadOnly = true
+                                           )
+                                       )
+                                   }
+                               }
+                           }
+                       }
+                       exploreRecipes.postValue(
+                           exploreList
+                               .distinctBy { it.id }
+                               .distinctBy { it.name.trim().lowercase() }
+                               .sortedWith(compareBy({ it.getCategoryEnum().ordinal }, { it.name.lowercase() }))
+                       )
+                   } else {
+                       exploreRecipes.postValue(emptyList())
+                   }
+               }
+
+               override fun onCancelled(error: DatabaseError) {}
+           })
+       return exploreRecipes
    }
 
    fun addRecipe(recipe: Recipe): Task<Void> {
