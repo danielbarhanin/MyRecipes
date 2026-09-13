@@ -1,0 +1,39 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+  <!-- Steam lines -->
+  <path
+      android:strokeColor="#FF000000"
+      android:strokeWidth="1.2"
+      android:strokeLineCap="round"
+      android:strokeLineJoin="round"
+      android:pathData="M8,4.5 C8,3.5 9,3 8.5,2 M12,4.5 C12,3.5 13,3 12.5,2 M16,4.5 C16,3.5 17,3 16.5,2" />
+
+  <!-- Soup Bowl Rim -->
+  <path
+      android:strokeColor="#FF000000"
+      android:strokeWidth="1.2"
+      android:strokeLineCap="round"
+      android:strokeLineJoin="round"
+      android:pathData="M3,8 L21,8 M3,8 C3,14 6,17.5 12,17.5 C18,17.5 21,14 21,8" />
+
+  <!-- Bowl Base -->
+  <path
+      android:strokeColor="#FF000000"
+      android:strokeWidth="1.2"
+      android:strokeLineCap="round"
+      android:strokeLineJoin="round"
+      android:pathData="M8,17.5 L7,20 L17,20 L16,17.5" />
+
+  <!-- Spoon handle in bowl -->
+  <path
+      android:strokeColor="#FF000000"
+      android:strokeWidth="1.2"
+      android:strokeLineCap="round"
+      android:strokeLineJoin="round"
+      android:pathData="M14.5,11 L19,5.5" />
+
+</vector>

@@ -18,14 +18,27 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/recipeIcon"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/recipeImageCard"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:strokeWidth="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_recipe" />
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/recipeIcon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:padding="0dp"
+                app:srcCompat="@drawable/ic_recipe" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <androidx.appcompat.widget.AppCompatTextView
             android:id="@+id/recipeName"
@@ -38,7 +51,7 @@
             android:textSize="18sp"
             app:layout_constraintBottom_toTopOf="@id/categoryBadge"
             app:layout_constraintEnd_toStartOf="@+id/deleteButton"
-            app:layout_constraintStart_toEndOf="@+id/recipeIcon"
+            app:layout_constraintStart_toEndOf="@+id/recipeImageCard"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Cheese Cake" />
 

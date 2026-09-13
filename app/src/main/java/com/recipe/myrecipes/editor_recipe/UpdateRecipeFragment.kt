@@ -69,6 +69,11 @@ class UpdateRecipeFragment : BaseRecipeEditorFragment() {
 
         setupCategoryChips(recipe.getCategoryEnum())
 
+        if (recipe.imageUrl.isNotEmpty()) {
+            currentImageUrl = recipe.imageUrl
+            displaySelectedImage(recipe.imageUrl)
+        }
+
         recipe.ingredients.forEach {
             addIngredient(it)
         }
@@ -116,20 +121,37 @@ class UpdateRecipeFragment : BaseRecipeEditorFragment() {
             return
         }
 
-        val recipe = Recipe(args.recipe.id, ingredients, recipeName, instructions, urlLink, args.recipe.viewOrder, selectedCategory.name)
+        showLoadingState()
 
-        val mTask = recipeViewModel.updateRecipe(recipe)
+        val saveUpdatedRecipe = { finalImageUrl: String ->
+            val recipe = Recipe(args.recipe.id, ingredients, recipeName, instructions, urlLink, args.recipe.viewOrder, selectedCategory.name, imageUrl = finalImageUrl)
 
-        mTask.addOnSuccessListener {
-            Toast.makeText(requireContext(), getText(R.string.toast_updated_successfully), Toast.LENGTH_LONG).show()
+            recipeViewModel.updateRecipe(recipe).addOnSuccessListener {
+                Toast.makeText(requireContext(), getText(R.string.toast_updated_successfully), Toast.LENGTH_LONG).show()
 
-            val action =
-                UpdateRecipeFragmentDirections.actionUpdateRecipeFragmentToRecipePageFragment(
-                    recipe,
-                )
-            findNavController().navigate(action)
-        }.addOnFailureListener { error ->
-            Toast.makeText(requireContext(), String.format(getString(R.string.toast_error), error.message), Toast.LENGTH_LONG).show()
+                val action =
+                    UpdateRecipeFragmentDirections.actionUpdateRecipeFragmentToRecipePageFragment(
+                        recipe,
+                    )
+                findNavController().navigate(action)
+            }.addOnFailureListener { error ->
+                hideLoadingState(R.string.update)
+                Toast.makeText(requireContext(), String.format(getString(R.string.toast_error), error.message), Toast.LENGTH_LONG).show()
+            }
+        }
+
+        val newUri = selectedImageUri
+        if (newUri != null) {
+            Toast.makeText(requireContext(), getString(R.string.uploading_image), Toast.LENGTH_SHORT).show()
+            val localPermanentUri = saveImageToInternalStorage(newUri, args.recipe.id)
+
+            recipeViewModel.uploadRecipeImage(localPermanentUri, args.recipe.id).addOnSuccessListener { downloadUri ->
+                saveUpdatedRecipe(downloadUri.toString())
+            }.addOnFailureListener {
+                saveUpdatedRecipe(localPermanentUri.toString())
+            }
+        } else {
+            saveUpdatedRecipe(currentImageUrl)
         }
     }
 }

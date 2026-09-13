@@ -3,12 +3,15 @@ package com.recipe.myrecipes.recipe_page
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.recipe.myrecipes.R
 import com.recipe.myrecipes.data.Recipe
+import com.recipe.myrecipes.recipe_page.RecipeAdapter.ViewType.IMAGE
 import com.recipe.myrecipes.recipe_page.RecipeAdapter.ViewType.INGREDIENTS
 import com.recipe.myrecipes.recipe_page.RecipeAdapter.ViewType.INSTRUCTIONS
 import com.recipe.myrecipes.recipe_page.RecipeAdapter.ViewType.LINK
@@ -19,10 +22,17 @@ class RecipeAdapter(private val recipeItems: MutableList<RecipeItem>) : Recycler
         const val INSTRUCTIONS = 0
         const val LINK = 1
         const val INGREDIENTS = 2
+        const val IMAGE = 3
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecipeItemViewHolder {
         return when (viewType) {
+            IMAGE -> {
+                RecipeItemViewHolder.ImageViewHolder(
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.image_item, parent, false),
+                )
+            }
             INSTRUCTIONS -> {
                 RecipeItemViewHolder.InstructionsViewHolder(
                     LayoutInflater.from(parent.context)
@@ -44,19 +54,20 @@ class RecipeAdapter(private val recipeItems: MutableList<RecipeItem>) : Recycler
 
     override fun onBindViewHolder(holder: RecipeItemViewHolder, position: Int) {
         when (holder) {
+            is RecipeItemViewHolder.ImageViewHolder -> {
+                val item = recipeItems[position] as RecipeItem.Image
+                holder.bind(item.imageUrl)
+            }
             is RecipeItemViewHolder.InstructionsViewHolder -> {
-                val item = recipeItems[position]
-                item as RecipeItem.Instructions
+                val item = recipeItems[position] as RecipeItem.Instructions
                 holder.bind(item.body)
             }
             is RecipeItemViewHolder.LinkViewHolder -> {
-                val item = recipeItems[position]
-                item as RecipeItem.Link
+                val item = recipeItems[position] as RecipeItem.Link
                 holder.bind(item.recipe)
             }
             is RecipeItemViewHolder.IngredientsViewHolder -> {
-                val item = recipeItems[position]
-                item as RecipeItem.Ingredients
+                val item = recipeItems[position] as RecipeItem.Ingredients
                 holder.bind(item.ingredients)
             }
         }
@@ -66,6 +77,7 @@ class RecipeAdapter(private val recipeItems: MutableList<RecipeItem>) : Recycler
 
     override fun getItemViewType(position: Int): Int {
         return when (recipeItems[position]) {
+            is RecipeItem.Image -> IMAGE
             is RecipeItem.Instructions -> INSTRUCTIONS
             is RecipeItem.Link -> LINK
             is RecipeItem.Ingredients -> INGREDIENTS
@@ -74,6 +86,16 @@ class RecipeAdapter(private val recipeItems: MutableList<RecipeItem>) : Recycler
 }
 
 sealed class RecipeItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
+    class ImageViewHolder(view: View) : RecipeItemViewHolder(view) {
+        private val recipeImageView: AppCompatImageView = view.findViewById(R.id.recipeImage)
+
+        fun bind(imageUrl: String) {
+            recipeImageView.load(imageUrl) {
+                crossfade(enable = true)
+            }
+        }
+    }
 
     class InstructionsViewHolder(view: View) : RecipeItemViewHolder(view) {
         private val instructionsTextView: AppCompatTextView = view.findViewById(R.id.instructions)

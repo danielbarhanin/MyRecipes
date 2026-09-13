@@ -3,6 +3,9 @@
 
     // Add recipe
     <string name="enter_recipe_name">Enter recipe\'s name</string>
+    <string name="recipe_photo">Recipe Photo</string>
+    <string name="add_recipe_photo">Tap to select photo</string>
+    <string name="uploading_image">Uploading photo…</string>
     <string name="add_ingredients">Add ingredients</string>
     <string name="add_instructions">Add cooking instructions</string>
     <string name="add_link">Link to recipe</string>
@@ -67,7 +70,7 @@
     <!-- Terms and Conditions -->
     <string name="terms_and_conditions">Terms &amp; Conditions</string>
     <string name="terms_dialog_title">Terms &amp; Conditions</string>
-    <string name="terms_dialog_content">Welcome to My Recipes!\n\nBy using this application, you agree to the following terms and conditions:\n\n1. Public Visibility of Recipes:\nAny recipes you upload (including names, ingredients, instructions, and links) will be shared and visible to all app users in the Explore tab.\n\n2. User Account &amp; Data:\nYour saved recipes are securely linked to your account. We retain user preferences to ensure smooth synchronization across launches.\n\n3. Content Guidelines:\nUsers must refrain from uploading offensive or inappropriate content. We reserve the right to remove non-compliant content.\n\n4. Changes to Terms:\nThese terms may be updated from time to time. Continued use of the app constitutes acceptance of any modified terms.</string>
+    <string name="terms_dialog_content">Welcome to My Recipes!\n\nBy using this application, you agree to the following terms and conditions:\n\n1. Public Visibility of Recipes:\nAny recipes you upload (including names, ingredients, instructions, links, and uploaded photos) will be shared and visible to all app users in the Explore tab.\n\n2. User Account &amp; Data:\nYour saved recipes are securely linked to your account. We retain user preferences to ensure smooth synchronization across launches.\n\n3. Content Guidelines:\nUsers must refrain from uploading offensive, copyrighted, or inappropriate content or images. We reserve the right to remove non-compliant content.\n\n4. Changes to Terms:\nThese terms may be updated from time to time. Continued use of the app constitutes acceptance of any modified terms.</string>
     <string name="terms_agree_button">I Understand</string>
 
 

@@ -96,4 +96,9 @@ dependencies {
 
     // Add the dependency for the Realtime Database library
     implementation("com.google.firebase:firebase-database")
+    implementation("com.google.firebase:firebase-storage")
+
+    // Coil for image loading
+    implementation("io.coil-kt:coil:2.6.0")
+    implementation("io.coil-kt:coil-svg:2.6.0")
 }

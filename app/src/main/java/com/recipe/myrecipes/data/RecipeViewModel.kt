@@ -1,5 +1,6 @@
 package com.recipe.myrecipes.data
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -10,6 +11,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
+import com.google.firebase.storage.FirebaseStorage
 import java.util.UUID
 
 class RecipeViewModel : ViewModel() {
@@ -30,6 +32,7 @@ class RecipeViewModel : ViewModel() {
             URL_LINK to recipe.urlLink,
             VIEW_ORDER to recipe.viewOrder,
             CATEGORY to recipe.category,
+            IMAGE_URL to recipe.imageUrl,
         )
     }
 
@@ -54,6 +57,7 @@ class RecipeViewModel : ViewModel() {
                     urlLink = recipeData.child(URL_LINK).getValue<String>() ?: "",
                     viewOrder = recipeData.child(VIEW_ORDER).getValue<Int>() ?: 0,
                     category = recipeData.child(CATEGORY).getValue<String>() ?: Category.MAIN_COURSE.name,
+                    imageUrl = recipeData.child(IMAGE_URL).getValue<String>() ?: "",
                 ),
             )
         }
@@ -124,6 +128,7 @@ class RecipeViewModel : ViewModel() {
                                                     viewOrder = recipeData.child(VIEW_ORDER).getValue<Int>() ?: 0,
                                                     category = recipeData.child(CATEGORY).getValue<String>() ?: Category.MAIN_COURSE.name,
                                                     isReadOnly = true,
+                                                    imageUrl = recipeData.child(IMAGE_URL).getValue<String>() ?: "",
                                                 ),
                                             )
                                         }
@@ -150,6 +155,22 @@ class RecipeViewModel : ViewModel() {
                 },
             )
         return exploreRecipes
+    }
+
+    fun uploadRecipeImage(imageUri: Uri, recipeId: String): Task<Uri> {
+        val fileName = if ((recipeId.isNotEmpty()) && (recipeId != "0")) recipeId else UUID.randomUUID().toString()
+        val storage = try {
+            FirebaseStorage.getInstance("gs://my-recipes-97d34.appspot.com")
+        } catch (_: Exception) {
+            FirebaseStorage.getInstance()
+        }
+        val storageRef = storage.reference.child("recipe_images/$userId/$fileName.jpg")
+        return storageRef.putFile(imageUri).continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let { throw it }
+            }
+            storageRef.downloadUrl
+        }
     }
 
     fun addRecipe(recipe: Recipe): Task<Void> {

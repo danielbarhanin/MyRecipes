@@ -9,6 +9,10 @@ import androidx.appcompat.widget.AppCompatTextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import android.widget.ImageView
+import coil.decode.SvgDecoder
+import coil.dispose
+import coil.load
 import com.recipe.myrecipes.R
 import com.recipe.myrecipes.data.Recipe
 import java.util.Collections
@@ -92,11 +96,32 @@ class RecipesAdapter(
         private val categoryBadge: AppCompatTextView = itemView.findViewById(R.id.categoryBadge)
         private val recipeRow: ConstraintLayout = itemView.findViewById(R.id.recipeRow)
         private val deleteButton: AppCompatImageView = itemView.findViewById(R.id.deleteButton)
+        private val recipeIcon: AppCompatImageView = itemView.findViewById(R.id.recipeIcon)
 
         fun bind(recipe: Recipe) {
             val cat = recipe.getCategoryEnum()
             recipeName.text = recipe.name
             categoryBadge.text = itemView.context.getString(cat.stringResId)
+
+            if (recipe.imageUrl.isNotEmpty()) {
+                recipeIcon.setPadding(0, 0, 0, 0)
+                recipeIcon.scaleType = ImageView.ScaleType.CENTER_CROP
+                recipeIcon.load(recipe.imageUrl) {
+                    crossfade(enable = true)
+                    placeholder(cat.iconResId)
+                    error(cat.iconResId)
+                }
+            } else {
+                recipeIcon.dispose()
+                val paddingPx = (10 * itemView.resources.displayMetrics.density).toInt()
+                recipeIcon.setPadding(paddingPx, paddingPx, paddingPx, paddingPx)
+                recipeIcon.scaleType = ImageView.ScaleType.FIT_CENTER
+                recipeIcon.load("file:///android_asset/category_icons/${cat.svgAssetFileName}") {
+                    decoderFactory(SvgDecoder.Factory())
+                    placeholder(cat.iconResId)
+                    error(cat.iconResId)
+                }
+            }
 
             if (recipe.isReadOnly) {
                 categoryBadge.visibility = View.GONE

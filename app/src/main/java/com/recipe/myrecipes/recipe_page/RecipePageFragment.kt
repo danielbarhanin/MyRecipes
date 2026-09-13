@@ -5,7 +5,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.addCallback
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.fragment.app.Fragment
@@ -19,6 +21,7 @@ import com.recipe.myrecipes.data.Recipe
 import com.recipe.myrecipes.data.RecipeViewModel
 
 sealed class RecipeItem {
+    data class Image(val imageUrl: String) : RecipeItem()
     data class Instructions(val body: String) : RecipeItem()
     data class Link(val recipe: Recipe) : RecipeItem()
     data class Ingredients(val ingredients: List<String>) : RecipeItem()
@@ -34,6 +37,7 @@ class RecipePageFragment : Fragment() {
     private lateinit var recipeItems: RecyclerView
     private lateinit var exitButton: AppCompatImageView
     private lateinit var editButton: AppCompatImageView
+    private lateinit var deleteButton: AppCompatImageView
     private lateinit var shareButton: AppCompatImageView
 
     private val items = mutableListOf<RecipeItem>()
@@ -62,11 +66,17 @@ class RecipePageFragment : Fragment() {
         if (args.recipeItems.isReadOnly) {
             editButton.visibility = View.GONE
             editButton.setOnClickListener(null)
+            deleteButton.visibility = View.GONE
+            deleteButton.setOnClickListener(null)
         } else {
             editButton.visibility = View.VISIBLE
             editButton.setOnClickListener {
                 val action = RecipePageFragmentDirections.actionRecipePageFragmentToUpdateRecipeFragment(args.recipeItems)
                 findNavController().navigate(action)
+            }
+            deleteButton.visibility = View.VISIBLE
+            deleteButton.setOnClickListener {
+                showDeleteRecipeAlert(args.recipeItems)
             }
         }
 
@@ -80,6 +90,11 @@ class RecipePageFragment : Fragment() {
         val cat = recipe.getCategoryEnum()
         recipeName.text = recipe.name
         categoryBadge.text = getString(cat.stringResId)
+
+        items.clear()
+        if (recipe.imageUrl.isNotEmpty()) {
+            items.add(RecipeItem.Image(recipe.imageUrl))
+        }
 
         items.add(RecipeItem.Ingredients(recipe.ingredients))
         items.add(RecipeItem.Instructions(recipe.instructions))
@@ -95,6 +110,7 @@ class RecipePageFragment : Fragment() {
         recipeItems = findViewById(R.id.recyclerView)
         exitButton = findViewById(R.id.exitButton)
         editButton = findViewById(R.id.editButton)
+        deleteButton = findViewById(R.id.deleteButton)
         shareButton = findViewById(R.id.shareButton)
     }
 
@@ -104,5 +120,27 @@ class RecipePageFragment : Fragment() {
         intent.putExtra(Intent.EXTRA_TEXT, args.recipeItems.getRecipeString(requireContext()))
 
         requireActivity().startActivity(Intent.createChooser(intent, "Share the recipe.."))
+    }
+
+    private fun showDeleteRecipeAlert(recipe: Recipe) {
+        MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog_Rounded)
+            .setTitle(String.format(getString(R.string.delete_alert_title), recipe.name))
+            .setMessage(String.format(getString(R.string.delete_alert_body), recipe.name))
+            .setPositiveButton(getString(R.string.delete_alert_positive_button)) { _, _ ->
+                deleteRecipe(recipe)
+            }
+            .setNegativeButton(getString(R.string.delete_alert_negative_button), null)
+            .show()
+    }
+
+    private fun deleteRecipe(recipe: Recipe) {
+        recipeViewModel.deleteRecipe(recipe).addOnCompleteListener {
+            Toast.makeText(
+                requireContext(),
+                String.format(getString(R.string.toast_deleted_successfully), recipe.name),
+                Toast.LENGTH_SHORT
+            ).show()
+            findNavController().navigate(R.id.action_fragmentRecipe_to_recipesFragment)
+        }
     }
 }

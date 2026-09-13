@@ -110,18 +110,37 @@ class AddRecipeFragment : BaseRecipeEditorFragment() {
             return
         }
 
-        val mTask = recipeViewModel.addRecipe(Recipe("0", ingredients, recipeName, instructions, urlLink, order, selectedCategory.name))
+        showLoadingState()
 
-        mTask.addOnSuccessListener {
-            Toast.makeText(requireContext(), getString(R.string.toast_added_successfully), Toast.LENGTH_LONG).show()
+        val saveRecipeWithImageUrl = { imageUrl: String ->
+            val recipe = Recipe("0", ingredients, recipeName, instructions, urlLink, order, selectedCategory.name, imageUrl = imageUrl)
+            recipeViewModel.addRecipe(recipe).addOnSuccessListener {
+                Toast.makeText(requireContext(), getString(R.string.toast_added_successfully), Toast.LENGTH_LONG).show()
 
-            activity?.getPreferences(Context.MODE_PRIVATE)?.edit {
-                putInt(LAST_VIEW_ORDER, order + 1)
-                putString(LAST_SELECTED_TAB, "ALL_KEY")
+                activity?.getPreferences(Context.MODE_PRIVATE)?.edit {
+                    putInt(LAST_VIEW_ORDER, order + 1)
+                    putString(LAST_SELECTED_TAB, "ALL_KEY")
+                }
+                findNavController().navigate(R.id.action_addRecipeFragment_to_recipesFragment)
+            }.addOnFailureListener { error ->
+                hideLoadingState(R.string.upload)
+                Toast.makeText(requireContext(), String.format(getString(R.string.toast_error), error.message), Toast.LENGTH_LONG).show()
             }
-            findNavController().navigate(R.id.action_addRecipeFragment_to_recipesFragment)
-        }.addOnFailureListener { error ->
-            Toast.makeText(requireContext(), String.format(getString(R.string.toast_error), error.message), Toast.LENGTH_LONG).show()
+        }
+
+        val uri = selectedImageUri
+        if (uri != null) {
+            Toast.makeText(requireContext(), getString(R.string.uploading_image), Toast.LENGTH_SHORT).show()
+            val tempId = java.util.UUID.randomUUID().toString()
+            val localPermanentUri = saveImageToInternalStorage(uri, tempId)
+
+            recipeViewModel.uploadRecipeImage(localPermanentUri, tempId).addOnSuccessListener { downloadUri ->
+                saveRecipeWithImageUrl(downloadUri.toString())
+            }.addOnFailureListener {
+                saveRecipeWithImageUrl(localPermanentUri.toString())
+            }
+        } else {
+            saveRecipeWithImageUrl("")
         }
     }
 }

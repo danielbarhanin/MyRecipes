@@ -97,6 +97,105 @@
 
             </com.google.android.material.card.MaterialCardView>
 
+            <!-- Card 0: Recipe Photo -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardRecipePhoto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/surface_card"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/card_stroke"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/titleRecipeImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/heebo_bold"
+                        android:text="@string/recipe_photo"
+                        android:textColor="@color/text_primary"
+                        android:textSize="17sp" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/imagePickerContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:layout_marginTop="12dp"
+                        app:cardCornerRadius="14dp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="@color/cat_badge_bg"
+                        app:strokeColor="@color/card_stroke"
+                        app:strokeWidth="1dp">
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/recipeImagePreview"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:scaleType="centerCrop"
+                                android:visibility="gone" />
+
+                            <LinearLayout
+                                android:id="@+id/addPhotoPlaceholder"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="center"
+                                android:orientation="vertical"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    app:srcCompat="@drawable/ic_add_photo"
+                                    app:tint="@color/colorPrimary" />
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/selectPhotoText"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="8dp"
+                                    android:fontFamily="@font/heebo_medium"
+                                    android:text="@string/add_recipe_photo"
+                                    android:textColor="@color/colorPrimary"
+                                    android:textSize="14sp" />
+
+                            </LinearLayout>
+
+                            <androidx.appcompat.widget.AppCompatImageView
+                                android:id="@+id/removePhotoButton"
+                                android:layout_width="32dp"
+                                android:layout_height="32dp"
+                                android:layout_margin="8dp"
+                                android:background="@drawable/bg_category_badge"
+                                android:padding="6dp"
+                                android:visibility="gone"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:srcCompat="@drawable/ic_delete"
+                                app:tint="@color/text_primary" />
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- Card 2: Ingredients -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -228,5 +327,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <ProgressBar
+        android:id="@+id/uploadProgressBar"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:indeterminateTint="@color/white"
+        android:elevation="4dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/uploadButton"
+        app:layout_constraintEnd_toEndOf="@id/uploadButton"
+        app:layout_constraintStart_toStartOf="@id/uploadButton"
+        app:layout_constraintTop_toTopOf="@id/uploadButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

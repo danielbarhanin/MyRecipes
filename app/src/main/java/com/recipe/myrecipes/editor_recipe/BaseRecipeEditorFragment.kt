@@ -2,6 +2,7 @@ package com.recipe.myrecipes.editor_recipe
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -9,17 +10,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import android.widget.ProgressBar
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import coil.load
+import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import com.recipe.myrecipes.R
 import com.recipe.myrecipes.data.Category
 import com.recipe.myrecipes.data.RecipeViewModel
+import java.io.File
+import java.io.FileOutputStream
 
 open class BaseRecipeEditorFragment : Fragment() {
 
@@ -36,8 +43,23 @@ open class BaseRecipeEditorFragment : Fragment() {
     protected lateinit var titleIngredients: AppCompatTextView
     protected lateinit var titleRecipeName: AppCompatTextView
     protected lateinit var titleInstructions: AppCompatTextView
+    protected lateinit var imagePickerContainer: MaterialCardView
+    protected lateinit var recipeImagePreview: AppCompatImageView
+    protected lateinit var addPhotoPlaceholder: View
+    protected lateinit var removePhotoButton: AppCompatImageView
+    protected lateinit var uploadProgressBar: ProgressBar
+
     protected var ingredientsViews: MutableList<IngredientView> = mutableListOf()
     protected var selectedCategory: Category = Category.MAIN_COURSE
+    protected var selectedImageUri: Uri? = null
+    protected var currentImageUrl: String = ""
+
+    protected val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
+        if (uri != null) {
+            selectedImageUri = uri
+            displaySelectedImage(uri)
+        }
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
@@ -62,6 +84,14 @@ open class BaseRecipeEditorFragment : Fragment() {
             return@setOnTouchListener false
         }
 
+        imagePickerContainer.setOnClickListener {
+            pickImageLauncher.launch("image/*")
+        }
+
+        removePhotoButton.setOnClickListener {
+            clearSelectedImage()
+        }
+
         return v
     }
 
@@ -77,6 +107,58 @@ open class BaseRecipeEditorFragment : Fragment() {
         titleIngredients = findViewById(R.id.titleIngredients)
         titleRecipeName = findViewById(R.id.titleRecipeName)
         titleInstructions = findViewById(R.id.titleInstructions)
+        imagePickerContainer = findViewById(R.id.imagePickerContainer)
+        recipeImagePreview = findViewById(R.id.recipeImagePreview)
+        addPhotoPlaceholder = findViewById(R.id.addPhotoPlaceholder)
+        removePhotoButton = findViewById(R.id.removePhotoButton)
+        uploadProgressBar = findViewById(R.id.uploadProgressBar)
+    }
+
+    protected fun showLoadingState() {
+        uploadButton.isEnabled = false
+        uploadButton.text = ""
+        uploadProgressBar.visibility = View.VISIBLE
+    }
+
+    protected fun hideLoadingState(buttonTextResId: Int) {
+        uploadButton.isEnabled = true
+        uploadButton.text = getString(buttonTextResId)
+        uploadProgressBar.visibility = View.GONE
+    }
+
+    protected fun displaySelectedImage(imageSource: Any) {
+        recipeImagePreview.visibility = View.VISIBLE
+        removePhotoButton.visibility = View.VISIBLE
+        addPhotoPlaceholder.visibility = View.GONE
+        recipeImagePreview.load(imageSource) {
+            crossfade(enable = true)
+        }
+    }
+
+    protected fun clearSelectedImage() {
+        selectedImageUri = null
+        currentImageUrl = ""
+        recipeImagePreview.visibility = View.GONE
+        removePhotoButton.visibility = View.GONE
+        addPhotoPlaceholder.visibility = View.VISIBLE
+    }
+
+    protected fun saveImageToInternalStorage(uri: Uri, fileName: String): Uri {
+        return try {
+            val inputStream = requireContext().contentResolver.openInputStream(uri) ?: return uri
+            val imagesDir = File(requireContext().filesDir, "recipe_images")
+            if (!imagesDir.exists()) imagesDir.mkdirs()
+            val imageFile = File(imagesDir, "$fileName.jpg")
+            val outputStream = FileOutputStream(imageFile)
+            inputStream.use { input ->
+                outputStream.use { output ->
+                    input.copyTo(output)
+                }
+            }
+            Uri.fromFile(imageFile)
+        } catch (_: Exception) {
+            uri
+        }
     }
 
     protected fun setupCategoryChips(defaultCategory: Category = Category.MAIN_COURSE) {
