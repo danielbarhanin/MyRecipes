@@ -12,6 +12,7 @@ import androidx.core.content.edit
 import androidx.core.view.contains
 import androidx.navigation.fragment.findNavController
 import com.recipe.myrecipes.R
+import com.recipe.myrecipes.data.Category
 import com.recipe.myrecipes.data.Recipe
 import com.recipe.myrecipes.home.LAST_VIEW_ORDER
 
@@ -38,12 +39,18 @@ class AddRecipeFragment: BaseRecipeEditorFragment() {
         }
 
         titleIngredients.setOnClickListener {
-            addIngredient()
+            addIngredient(requestFocus = true)
         }
 
-        recipeNameEditText.requestFocus()
-        addIngredient()
+        setupCategoryChips(Category.MAIN_COURSE)
+        addIngredient(requestFocus = false)
         setText()
+
+        recipeNameEditText.post {
+            recipeNameEditText.requestFocus()
+            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? android.view.inputmethod.InputMethodManager
+            imm?.showSoftInput(recipeNameEditText, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT)
+        }
 
         return v
     }
@@ -55,7 +62,7 @@ class AddRecipeFragment: BaseRecipeEditorFragment() {
         uploadButton.text = getString(R.string.upload)
     }
 
-    private fun addIngredient() {
+    private fun addIngredient(requestFocus: Boolean = false) {
         val ingredient = IngredientView(requireContext(), ingredientsViews.size).apply {
             onDeleteIngredient = {
                 ingredientsViews.remove(this)
@@ -76,7 +83,9 @@ class AddRecipeFragment: BaseRecipeEditorFragment() {
         }
         ingredientsContainer.addView(ingredient)
         ingredientsViews.add(ingredient)
-        ingredient.requestFocus()
+        if (requestFocus) {
+            ingredient.requestFocus()
+        }
     }
 
     private fun insertDataToDatabase() {
@@ -99,7 +108,7 @@ class AddRecipeFragment: BaseRecipeEditorFragment() {
             return
         }
 
-        val mTask = recipeViewModel.addRecipe(Recipe("0", ingredients, recipeName, instructions, urlLink, order))
+        val mTask = recipeViewModel.addRecipe(Recipe("0", ingredients, recipeName, instructions, urlLink, order, selectedCategory.name))
 
         mTask.addOnSuccessListener {
             Toast.makeText(requireContext(), getString(R.string.toast_added_successfully), Toast.LENGTH_LONG).show()

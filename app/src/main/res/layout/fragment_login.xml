@@ -1,43 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/loginRoot"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:background="@color/app_background"
+    android:padding="24dp">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <LinearLayout
+        android:id="@+id/heroSection"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@drawable/login_background"
-        android:scaleType="fitXY"
-        android:adjustViewBounds="true"/>
-
-   <androidx.appcompat.widget.AppCompatTextView
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:text="@string/my_recipes"
-       android:textColor="@color/colorPrimary"
-       android:textSize="30sp"
-       android:layout_marginTop="30dp"
-       android:textStyle="bold"
-       android:fontFamily="@font/gilroy_bold"
-       app:layout_constraintBottom_toTopOf="@+id/LoginButton"
-       app:layout_constraintEnd_toEndOf="parent"
-       app:layout_constraintStart_toStartOf="parent"
-       android:layout_marginBottom="50dp"/>
-
-    <Button
-        android:id="@+id/LoginButton"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/LoginButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="140dp"
+            android:layout_height="140dp"
+            android:layout_marginBottom="28dp"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="70dp"
+            app:cardElevation="4dp"
+            app:strokeColor="#EFE8E8"
+            app:strokeWidth="1dp">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="90dp"
+                android:layout_height="90dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/ic_chef" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/appTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/heebo_bold"
+            android:text="@string/my_recipes"
+            android:textColor="@color/text_primary"
+            android:textSize="32sp" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/appSubtitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/heebo_regular"
+            android:text="@string/login_subtitle"
+            android:textColor="@color/text_secondary"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/LoginButton"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/bg_next_button"
+        android:clickable="true"
+        android:elevation="4dp"
+        android:focusable="true"
+        android:fontFamily="@font/heebo_bold"
+        android:gravity="center"
+        android:paddingHorizontal="24dp"
+        android:text="@string/sign_in_google"
+        android:textColor="@color/white"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginTop="150dp"
-        android:paddingHorizontal="60dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:textColor="@color/white"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

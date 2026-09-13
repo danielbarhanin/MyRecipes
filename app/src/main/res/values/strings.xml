@@ -19,6 +19,14 @@
     <string name="my_recipes">My Recipes</string>
     <string name="search_bar">Search</string>
 
+    // Categories
+    <string name="category_all">All</string>
+    <string name="category_salads">Salads</string>
+    <string name="category_soups">Soups</string>
+    <string name="category_main_course">Main Course</string>
+    <string name="category_desserts">Desserts</string>
+    <string name="select_category">Select Category</string>
+
     // Recipe page
     <string name="instructions">Cooking Instructions:</string>
     <string name="ingredients">Ingredients:</string>
@@ -45,6 +53,11 @@
     // Login Screen
     <string name="login">Login</string>
     <string name="login_error">Something went wrong, try again</string>
+    <string name="sign_in_google">Sign in with Google</string>
+    <string name="login_subtitle">Your personal recipe notebook</string>
+    <string name="logout">Logout</string>
+    <string name="logout_confirm_title">Logout</string>
+    <string name="logout_confirm_body">Are you sure you want to log out?</string>
 
 
 </resources>

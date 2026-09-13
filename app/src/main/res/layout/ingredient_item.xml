@@ -3,22 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginBottom="5dp">
+    android:layout_marginBottom="6dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
 
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:buttonTint="@color/colorPrimary"/>
+        android:buttonTint="@color/colorPrimary" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/ingredientName"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:textSize="18sp"
-        android:fontFamily="@font/gilroy_light"
-        android:textColor="#454545"
-        tools:text="two cups of sugar"/>
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/heebo_regular"
+        android:textColor="@color/text_primary"
+        android:textSize="16sp"
+        tools:text="two cups of sugar" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>

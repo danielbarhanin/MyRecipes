@@ -1,181 +1,232 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/exitButton"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:padding="2dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        app:srcCompat="@drawable/ic_exit"/>
+        app:srcCompat="@drawable/ic_exit" />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/exitButton"
-        app:layout_constraintBottom_toTopOf="@+id/uploadButton"
-        android:layout_marginTop="20dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
         android:fillViewport="true"
         android:overScrollMode="never"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@+id/uploadButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/exitButton">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingBottom="20dp">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/titleRecipeName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-               app:layout_constraintTop_toTopOf="parent"
-                android:text="@string/enter_recipe_name"
-                android:textColor="#454545"
-                android:textSize="18sp"
-                android:fontFamily="@font/gilroy_bold"/>
-
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/recipeName"
+            <!-- Card 1: Basic Info -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/titleRecipeName"
-                android:layout_marginTop="20dp"
-                android:layout_marginHorizontal="40dp"
-                android:inputType="text"
-                android:textColor="#454545"
-                android:textSize="18sp"
-                android:fontFamily="@font/gilroy_light"
-                android:background="@drawable/bg_edit_text"/>
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/surface_card"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/card_stroke"
+                app:strokeWidth="1dp">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/titleIngredients"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/recipeName"
-                android:layout_marginTop="50dp"
-                android:gravity="center"
-                android:text="@string/add_ingredients"
-                android:textColor="#454545"
-                android:textSize="18sp"
-                android:drawablePadding="15dp"
-                android:drawableEnd="@drawable/ic_add_ingredient"
-                android:fontFamily="@font/gilroy_bold"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            <androidx.appcompat.widget.LinearLayoutCompat
-                android:id="@+id/ingredientsContainer"
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/titleRecipeName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/heebo_bold"
+                        android:text="@string/enter_recipe_name"
+                        android:textColor="@color/text_primary"
+                        android:textSize="17sp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/recipeName"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_edit_text"
+                        android:fontFamily="@font/heebo_bold"
+                        android:inputType="textCapWords"
+                        android:paddingHorizontal="14dp"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_hint"
+                        android:textSize="16sp" />
+
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/titleCategory"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:fontFamily="@font/heebo_bold"
+                        android:text="@string/select_category"
+                        android:textColor="@color/text_primary"
+                        android:textSize="17sp" />
+
+                    <com.google.android.material.chip.ChipGroup
+                        android:id="@+id/categoryChipGroup"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:chipSpacingHorizontal="8dp"
+                        app:selectionRequired="true"
+                        app:singleSelection="true" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card 2: Ingredients -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/titleIngredients"
-                android:layout_marginTop="15dp"
-                android:layout_marginStart="25dp"
-                android:layout_marginEnd="30dp"
-                android:orientation="vertical">
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/surface_card"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/card_stroke"
+                app:strokeWidth="1dp">
 
-            </androidx.appcompat.widget.LinearLayoutCompat>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/titleInstructions"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ingredientsContainer"
-                android:layout_marginTop="35dp"
-                android:text="@string/add_instructions"
-                android:textColor="#454545"
-                android:textSize="18sp"
-                android:fontFamily="@font/gilroy_bold"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/titleIngredients"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawableEnd="@drawable/ic_add_ingredient"
+                        android:drawablePadding="10dp"
+                        android:fontFamily="@font/heebo_bold"
+                        android:gravity="center_vertical"
+                        android:text="@string/add_ingredients"
+                        android:textColor="@color/text_primary"
+                        android:textSize="17sp" />
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/instructions"
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:id="@+id/ingredientsContainer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="vertical" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Card 3: Instructions & Link -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="130dp"
-                android:padding="10dp"
-                android:gravity="start"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/titleInstructions"
-                android:layout_marginHorizontal="25dp"
-                android:layout_marginTop="20dp"
-                android:overScrollMode="always"
-                android:scrollbars="vertical"
-                android:imeOptions="actionNone"
-                android:textColor="#454545"
-                android:textSize="18sp"
-                android:fontFamily="@font/gilroy_light"
-                android:background="@drawable/bg_edit_text"/>
+                android:layout_marginBottom="16dp"
+                app:cardBackgroundColor="@color/surface_card"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:strokeColor="@color/card_stroke"
+                app:strokeWidth="1dp">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/titleLink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/instructions"
-                android:layout_marginTop="30dp"
-                android:drawableStart="@drawable/ic_url_link"
-                android:drawablePadding="5dp"
-                android:text="@string/add_link"
-                android:overScrollMode="always"
-                android:scrollbarStyle="insideInset"
-                android:scrollbars="vertical"
-                android:textColor="#454545"
-                android:textSize="18sp"
-                android:fontFamily="@font/gilroy_bold"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
 
-            <androidx.appcompat.widget.AppCompatEditText
-                android:id="@+id/link"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/titleLink"
-                android:layout_marginHorizontal="25dp"
-                android:layout_marginTop="20dp"
-                android:inputType="text"
-                android:textColor="#454545"
-                android:textSize="18sp"
-                android:fontFamily="@font/gilroy_light"
-                android:background="@drawable/bg_edit_text"/>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/titleInstructions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/heebo_bold"
+                        android:text="@string/add_instructions"
+                        android:textColor="@color/text_primary"
+                        android:textSize="17sp" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/instructions"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_edit_text"
+                        android:fontFamily="@font/heebo_regular"
+                        android:gravity="start|top"
+                        android:imeOptions="actionNone"
+                        android:minHeight="120dp"
+                        android:overScrollMode="always"
+                        android:padding="14dp"
+                        android:scrollbars="vertical"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_hint"
+                        android:textSize="16sp" />
 
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/titleLink"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:drawableStart="@drawable/ic_url_link"
+                        android:drawablePadding="8dp"
+                        android:fontFamily="@font/heebo_bold"
+                        android:text="@string/add_link"
+                        android:textColor="@color/text_primary"
+                        android:textSize="17sp" />
+
+                    <androidx.appcompat.widget.AppCompatEditText
+                        android:id="@+id/link"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="10dp"
+                        android:background="@drawable/bg_edit_text"
+                        android:fontFamily="@font/heebo_regular"
+                        android:inputType="textUri"
+                        android:paddingHorizontal="14dp"
+                        android:textColor="@color/text_primary"
+                        android:textColorHint="@color/text_hint"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/uploadButton"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="52dp"
+        android:layout_marginHorizontal="20dp"
         android:layout_marginBottom="20dp"
-        android:layout_marginHorizontal="90dp"
-        android:paddingVertical="10dp"
-        android:text="@string/upload"
-        android:textSize="18sp"
+        android:background="@drawable/bg_next_button"
+        android:fontFamily="@font/heebo_bold"
         android:gravity="center"
-        android:textColor="#454545"
-        android:fontFamily="@font/gilroy_bold"
-        android:background="@drawable/bg_next_button" />
+        android:text="@string/upload"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

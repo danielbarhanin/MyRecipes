@@ -12,7 +12,11 @@ import com.recipe.myrecipes.R
 import com.recipe.myrecipes.data.Recipe
 import java.util.*
 
-class RecipesAdapter(var onDeleteRecipeCallback: ((Recipe) -> Unit), var onChangingOrder: ((recipes: List<Recipe>) -> Unit)): RecyclerView.Adapter<RecipesAdapter.RecipeViewHolder>() {
+class RecipesAdapter(
+    var onDeleteRecipeCallback: ((Recipe) -> Unit),
+    var onChangingOrder: ((recipes: List<Recipe>) -> Unit),
+    var onStartDrag: ((RecyclerView.ViewHolder) -> Unit)? = null
+): RecyclerView.Adapter<RecipesAdapter.RecipeViewHolder>() {
 
     private var data = emptyList<Recipe>()
 
@@ -42,11 +46,14 @@ class RecipesAdapter(var onDeleteRecipeCallback: ((Recipe) -> Unit), var onChang
 
     inner class RecipeViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         private val recipeName: AppCompatTextView = itemView.findViewById(R.id.recipeName)
+        private val categoryBadge: AppCompatTextView = itemView.findViewById(R.id.categoryBadge)
         private val recipeRow: ConstraintLayout = itemView.findViewById(R.id.recipeRow)
         private val deleteButton: AppCompatImageView = itemView.findViewById(R.id.deleteButton)
 
         fun bind(recipe: Recipe) {
+            val cat = recipe.getCategoryEnum()
             recipeName.text = recipe.name
+            categoryBadge.text = itemView.context.getString(cat.stringResId)
 
             deleteButton.setOnClickListener {
               onDeleteRecipeCallback.invoke(recipe)
@@ -55,6 +62,11 @@ class RecipesAdapter(var onDeleteRecipeCallback: ((Recipe) -> Unit), var onChang
             recipeRow.setOnClickListener {
                 val action = RecipesFragmentDirections.actionRecipesFragmentToFragmentRecipe(recipe)
                 itemView.findNavController().navigate(action)
+            }
+
+            recipeRow.setOnLongClickListener {
+                onStartDrag?.invoke(this)
+                true
             }
         }
     }

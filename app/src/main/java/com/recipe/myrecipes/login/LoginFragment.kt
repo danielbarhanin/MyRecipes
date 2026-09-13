@@ -5,9 +5,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.Toast
 import androidx.core.os.bundleOf
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -20,7 +21,7 @@ import com.recipe.myrecipes.R
 
 class LoginFragment: Fragment() {
 
-    private lateinit var loginButton: Button
+    private lateinit var loginButton: View
 
     private lateinit var auth: FirebaseAuth
     private lateinit var mGoogleSignInClient: GoogleSignInClient
@@ -34,6 +35,12 @@ class LoginFragment: Fragment() {
         val v = inflater.inflate(R.layout.fragment_login, container, false)
 
         loginButton = v.findViewById(R.id.LoginButton)
+
+        ViewCompat.setOnApplyWindowInsetsListener(v.findViewById(R.id.loginRoot)) { view, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            view.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
 
         auth = FirebaseAuth.getInstance()
 
