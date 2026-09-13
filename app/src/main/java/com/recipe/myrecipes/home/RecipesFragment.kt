@@ -13,7 +13,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -97,11 +96,11 @@ class RecipesFragment: Fragment() {
             }
         )
         recipesAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
+        recipesRecyclerView.adapter = recipesAdapter
 
-        recipeViewModel.getRecipes().observe(viewLifecycleOwner, Observer { recipes ->
+        recipeViewModel.getRecipes().observe(viewLifecycleOwner) { recipes ->
             recipesAdapter.setData(recipes.sortedBy { it.viewOrder })
-            recipesRecyclerView.adapter = recipesAdapter
-        })
+        }
 
         createItemTouchHelper().attachToRecyclerView(recipesRecyclerView)
     }
@@ -121,14 +120,6 @@ class RecipesFragment: Fragment() {
                 ?.edit { putInt(LAST_SCROLL_POSITION, lastScrollPosition) }
             activity?.getPreferences(Context.MODE_PRIVATE)?.edit { putInt(TOP_RECYCLER, top) }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        recipeViewModel.recipes.observe(viewLifecycleOwner, Observer { recipes ->
-            recipesAdapter.setData(recipes.sortedBy { it.viewOrder })
-            recipesRecyclerView.adapter = recipesAdapter
-        })
     }
 
     private fun createItemTouchHelper(): ItemTouchHelper {
