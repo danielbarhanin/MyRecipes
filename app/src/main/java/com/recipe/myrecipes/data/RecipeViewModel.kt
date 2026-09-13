@@ -27,7 +27,8 @@ class RecipeViewModel: ViewModel() {
             INGREDIENTS to recipe.ingredients,
             INSTRUCTIONS to recipe.instructions,
             URL_LINK to recipe.urlLink,
-            VIEW_ORDER to recipe.viewOrder
+            VIEW_ORDER to recipe.viewOrder,
+            CATEGORY to recipe.category
         )
     }
 
@@ -39,12 +40,13 @@ class RecipeViewModel: ViewModel() {
 
             recipes.add(
                 Recipe(
-                    id,
-                    recipeData.child(INGREDIENTS).getValue<List<String>>() ?: listOf(),
-                    recipeData.child(NAME).getValue<String>() ?: "",
-                    recipeData.child(INSTRUCTIONS).getValue<String>() ?: "",
-                    recipeData.child(URL_LINK).getValue<String>() ?: "",
-            recipeData.child(VIEW_ORDER).getValue<Int>() ?: 0,
+                    id = id,
+                    ingredients = recipeData.child(INGREDIENTS).getValue<List<String>>() ?: listOf(),
+                    name = recipeData.child(NAME).getValue<String>() ?: "",
+                    instructions = recipeData.child(INSTRUCTIONS).getValue<String>() ?: "",
+                    urlLink = recipeData.child(URL_LINK).getValue<String>() ?: "",
+                    viewOrder = recipeData.child(VIEW_ORDER).getValue<Int>() ?: 0,
+                    category = recipeData.child(CATEGORY).getValue<String>() ?: Category.MAIN_COURSE.name
                 )
             )
         }

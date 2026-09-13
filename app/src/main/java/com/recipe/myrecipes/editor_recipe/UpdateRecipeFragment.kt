@@ -67,6 +67,8 @@ class UpdateRecipeFragment: BaseRecipeEditorFragment() {
         instructionsEditText.setText(recipe.instructions)
         linkEditText.setText(recipe.urlLink)
 
+        setupCategoryChips(recipe.getCategoryEnum())
+
         recipe.ingredients.forEach {
             addIngredient(it)
         }
@@ -115,7 +117,7 @@ class UpdateRecipeFragment: BaseRecipeEditorFragment() {
             return
         }
 
-        val recipe = Recipe(args.recipe.id, ingredients, recipeName, instructions, urlLink, args.recipe.viewOrder)
+        val recipe = Recipe(args.recipe.id, ingredients, recipeName, instructions, urlLink, args.recipe.viewOrder, selectedCategory.name)
 
         val mTask = recipeViewModel.updateRecipe(recipe)
 

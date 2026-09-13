@@ -30,6 +30,7 @@ class RecipePageFragment: Fragment() {
     private lateinit var  recipeViewModel: RecipeViewModel
 
     private lateinit var recipeName: AppCompatTextView
+    private lateinit var categoryBadge: AppCompatTextView
     private lateinit var recipeItems: RecyclerView
     private lateinit var exitButton: AppCompatImageView
     private lateinit var editButton: AppCompatImageView
@@ -70,7 +71,9 @@ class RecipePageFragment: Fragment() {
 
     private fun createItems() {
         val recipe = args.recipeItems
+        val cat = recipe.getCategoryEnum()
         recipeName.text = recipe.name
+        categoryBadge.text = getString(cat.stringResId)
 
         items.add(RecipeItem.Ingredients(recipe.ingredients))
         items.add(RecipeItem.Instructions(recipe.instructions))
@@ -82,6 +85,7 @@ class RecipePageFragment: Fragment() {
 
     private fun View.initViews() {
         recipeName = findViewById(R.id.recipeName)
+        categoryBadge = findViewById(R.id.categoryBadge)
         recipeItems = findViewById(R.id.recyclerView)
         exitButton = findViewById(R.id.exitButton)
         editButton = findViewById(R.id.editButton)

@@ -87,6 +87,7 @@ sealed class RecipeItemViewHolder(itemView: View): RecyclerView.ViewHolder(itemV
         private val container: LinearLayoutCompat = view.findViewById(R.id.container)
 
         fun bind(ingredients: List<String>) {
+            container.removeAllViews()
             ingredients.forEach {
                 val layout = LayoutInflater.from(itemView.context).inflate(R.layout.ingredient_item, container, false)
                 val ingredientName: AppCompatTextView = layout.findViewById(R.id.ingredientName)
