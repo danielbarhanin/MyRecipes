@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.content.edit
@@ -14,14 +15,15 @@ import androidx.navigation.fragment.findNavController
 import com.recipe.myrecipes.R
 import com.recipe.myrecipes.data.Category
 import com.recipe.myrecipes.data.Recipe
+import com.recipe.myrecipes.home.LAST_SELECTED_TAB
 import com.recipe.myrecipes.home.LAST_VIEW_ORDER
 
-class AddRecipeFragment: BaseRecipeEditorFragment() {
+class AddRecipeFragment : BaseRecipeEditorFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
 
         val v = super.onCreateView(inflater, container, savedInstanceState)
@@ -48,8 +50,9 @@ class AddRecipeFragment: BaseRecipeEditorFragment() {
 
         recipeNameEditText.post {
             recipeNameEditText.requestFocus()
-            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? android.view.inputmethod.InputMethodManager
-            imm?.showSoftInput(recipeNameEditText, android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT)
+            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            @Suppress("DEPRECATION")
+            imm?.showSoftInput(recipeNameEditText, InputMethodManager.SHOW_IMPLICIT)
         }
 
         return v
@@ -63,7 +66,7 @@ class AddRecipeFragment: BaseRecipeEditorFragment() {
     }
 
     private fun addIngredient(requestFocus: Boolean = false) {
-        val ingredient = IngredientView(requireContext(), ingredientsViews.size).apply {
+        val ingredient = IngredientView(requireContext(), position = ingredientsViews.size).apply {
             onDeleteIngredient = {
                 ingredientsViews.remove(this)
                 if (ingredientsContainer.contains(this)) ingredientsContainer.removeView(this)
@@ -100,8 +103,7 @@ class AddRecipeFragment: BaseRecipeEditorFragment() {
                 getString(R.string.missing_recipe_name)
             } else if (instructions.isEmpty()) {
                 getString(R.string.missing_instructions)
-            }
-            else {
+            } else {
                 getString(R.string.missing_ingreideints)
             }
             Toast.makeText(requireContext(), String.format(getString(R.string.toast_please_fill), missingField), Toast.LENGTH_LONG).show()
@@ -113,9 +115,11 @@ class AddRecipeFragment: BaseRecipeEditorFragment() {
         mTask.addOnSuccessListener {
             Toast.makeText(requireContext(), getString(R.string.toast_added_successfully), Toast.LENGTH_LONG).show()
 
-            activity?.getPreferences(Context.MODE_PRIVATE)?.edit { putInt(LAST_VIEW_ORDER, order + 1) }
+            activity?.getPreferences(Context.MODE_PRIVATE)?.edit {
+                putInt(LAST_VIEW_ORDER, order + 1)
+                putString(LAST_SELECTED_TAB, "ALL_KEY")
+            }
             findNavController().navigate(R.id.action_addRecipeFragment_to_recipesFragment)
-
         }.addOnFailureListener { error ->
             Toast.makeText(requireContext(), String.format(getString(R.string.toast_error), error.message), Toast.LENGTH_LONG).show()
         }

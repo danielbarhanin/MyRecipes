@@ -18,6 +18,10 @@
     // Home page
     <string name="my_recipes">My Recipes</string>
     <string name="search_bar">Search</string>
+    <string name="nav_home">Home</string>
+    <string name="no_recipes_found">No recipes found</string>
+    <string name="no_recipes_subtitle">Try selecting another category or adding a new recipe!</string>
+    <string name="no_recipes_under_category">No recipes under %1$s category</string>
 
     // Categories
     <string name="category_all">All</string>
@@ -59,6 +63,12 @@
     <string name="logout">Logout</string>
     <string name="logout_confirm_title">Logout</string>
     <string name="logout_confirm_body">Are you sure you want to log out?</string>
+
+    <!-- Terms and Conditions -->
+    <string name="terms_and_conditions">Terms &amp; Conditions</string>
+    <string name="terms_dialog_title">Terms &amp; Conditions</string>
+    <string name="terms_dialog_content">Welcome to My Recipes!\n\nBy using this application, you agree to the following terms and conditions:\n\n1. Public Visibility of Recipes:\nAny recipes you upload (including names, ingredients, instructions, and links) will be shared and visible to all app users in the Explore tab.\n\n2. User Account &amp; Data:\nYour saved recipes are securely linked to your account. We retain user preferences to ensure smooth synchronization across launches.\n\n3. Content Guidelines:\nUsers must refrain from uploading offensive or inappropriate content. We reserve the right to remove non-compliant content.\n\n4. Changes to Terms:\nThese terms may be updated from time to time. Continued use of the app constitutes acceptance of any modified terms.</string>
+    <string name="terms_agree_button">I Understand</string>
 
 
 </resources>

@@ -1,5 +1,6 @@
 package com.recipe.myrecipes.home
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +11,7 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.recipe.myrecipes.R
 import com.recipe.myrecipes.data.Recipe
-import java.util.*
+import java.util.Collections
 
 sealed class HomeListItem {
     data class Header(val titleResId: Int) : HomeListItem()
@@ -20,8 +21,8 @@ sealed class HomeListItem {
 class RecipesAdapter(
     var onDeleteRecipeCallback: ((Recipe) -> Unit),
     var onChangingOrder: ((recipes: List<Recipe>) -> Unit),
-    var onStartDrag: ((RecyclerView.ViewHolder) -> Unit)? = null
-): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    var onStartDrag: ((RecyclerView.ViewHolder) -> Unit)? = null,
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
         private const val VIEW_TYPE_HEADER = 0
@@ -30,13 +31,10 @@ class RecipesAdapter(
 
     private var items = emptyList<HomeListItem>()
 
+    @SuppressLint("NotifyDataSetChanged")
     fun setItems(list: List<HomeListItem>) {
         items = list
         notifyDataSetChanged()
-    }
-
-    fun setRecipes(recipes: List<Recipe>) {
-        setItems(recipes.map { HomeListItem.RecipeItem(it) })
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -63,11 +61,11 @@ class RecipesAdapter(
 
     override fun getItemCount() = items.size
 
-    fun onChangingOrder(fromPosition : Int, toPosition: Int) {
-        if (fromPosition < items.size && toPosition < items.size) {
+    fun onChangingOrder(fromPosition: Int, toPosition: Int) {
+        if ((fromPosition < items.size) && (toPosition < items.size)) {
             val fromItem = items[fromPosition]
             val toItem = items[toPosition]
-            if (fromItem is HomeListItem.RecipeItem && toItem is HomeListItem.RecipeItem) {
+            if ((fromItem is HomeListItem.RecipeItem) && (toItem is HomeListItem.RecipeItem)) {
                 val list = items.toMutableList()
                 Collections.swap(list, fromPosition, toPosition)
                 items = list
@@ -77,11 +75,11 @@ class RecipesAdapter(
     }
 
     fun onFinishReorder() {
-        val recipes = items.filterIsInstance<HomeListItem.RecipeItem>().map { it.recipe }
+        val recipes = items.asSequence().filterIsInstance<HomeListItem.RecipeItem>().map { it.recipe }.toList()
         onChangingOrder.invoke(recipes)
     }
 
-    inner class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class HeaderViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val headerTitle: AppCompatTextView = itemView.findViewById(R.id.headerTitle)
 
         fun bind(header: HomeListItem.Header) {
@@ -89,7 +87,7 @@ class RecipesAdapter(
         }
     }
 
-    inner class RecipeViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+    inner class RecipeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val recipeName: AppCompatTextView = itemView.findViewById(R.id.recipeName)
         private val categoryBadge: AppCompatTextView = itemView.findViewById(R.id.categoryBadge)
         private val recipeRow: ConstraintLayout = itemView.findViewById(R.id.recipeRow)

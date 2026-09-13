@@ -13,14 +13,14 @@ import androidx.navigation.fragment.navArgs
 import com.recipe.myrecipes.R
 import com.recipe.myrecipes.data.Recipe
 
-class UpdateRecipeFragment: BaseRecipeEditorFragment() {
+class UpdateRecipeFragment : BaseRecipeEditorFragment() {
 
     private val args by navArgs<UpdateRecipeFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         val v = super.onCreateView(inflater, container, savedInstanceState)
 
@@ -29,7 +29,7 @@ class UpdateRecipeFragment: BaseRecipeEditorFragment() {
         exitButton.setOnClickListener {
             val action =
                 UpdateRecipeFragmentDirections.actionUpdateRecipeFragmentToRecipePageFragment(
-                    args.recipe
+                    args.recipe,
                 )
             findNavController().navigate(action)
         }
@@ -37,7 +37,7 @@ class UpdateRecipeFragment: BaseRecipeEditorFragment() {
         requireActivity().onBackPressedDispatcher.addCallback(this) {
             val action =
                 UpdateRecipeFragmentDirections.actionUpdateRecipeFragmentToRecipePageFragment(
-                    args.recipe
+                    args.recipe,
                 )
             findNavController().navigate(action)
         }
@@ -75,7 +75,7 @@ class UpdateRecipeFragment: BaseRecipeEditorFragment() {
     }
 
     private fun addIngredient(ingredientStr: String = "") {
-        val ingredient = IngredientView(requireContext(), ingredientsViews.size).apply {
+        val ingredient = IngredientView(requireContext(), position = ingredientsViews.size).apply {
             onDeleteIngredient = {
                 ingredientsViews.remove(this)
                 if (ingredientsContainer.contains(this)) ingredientsContainer.removeView(this)
@@ -109,8 +109,7 @@ class UpdateRecipeFragment: BaseRecipeEditorFragment() {
                 getString(R.string.missing_recipe_name)
             } else if (instructions.isEmpty()) {
                 getString(R.string.missing_instructions)
-            }
-            else {
+            } else {
                 getString(R.string.missing_ingreideints)
             }
             Toast.makeText(requireContext(), String.format(getString(R.string.toast_please_fill), missingField), Toast.LENGTH_LONG).show()
@@ -126,10 +125,9 @@ class UpdateRecipeFragment: BaseRecipeEditorFragment() {
 
             val action =
                 UpdateRecipeFragmentDirections.actionUpdateRecipeFragmentToRecipePageFragment(
-                    recipe
+                    recipe,
                 )
             findNavController().navigate(action)
-
         }.addOnFailureListener { error ->
             Toast.makeText(requireContext(), String.format(getString(R.string.toast_error), error.message), Toast.LENGTH_LONG).show()
         }

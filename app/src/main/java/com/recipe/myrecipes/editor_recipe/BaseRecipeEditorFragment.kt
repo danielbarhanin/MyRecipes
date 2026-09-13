@@ -1,5 +1,6 @@
 package com.recipe.myrecipes.editor_recipe
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -20,7 +21,7 @@ import com.recipe.myrecipes.R
 import com.recipe.myrecipes.data.Category
 import com.recipe.myrecipes.data.RecipeViewModel
 
-open class BaseRecipeEditorFragment: Fragment() {
+open class BaseRecipeEditorFragment : Fragment() {
 
     protected lateinit var recipeViewModel: RecipeViewModel
 
@@ -38,10 +39,11 @@ open class BaseRecipeEditorFragment: Fragment() {
     protected var ingredientsViews: MutableList<IngredientView> = mutableListOf()
     protected var selectedCategory: Category = Category.MAIN_COURSE
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         val v = inflater.inflate(R.layout.fragment_add_recipe, container, false)
 
@@ -51,15 +53,14 @@ open class BaseRecipeEditorFragment: Fragment() {
 
         recipeViewModel = ViewModelProvider(this)[RecipeViewModel::class.java]
 
-        // TODO - do it better
         instructionsEditText.setOnTouchListener { view, event ->
             view.parent.requestDisallowInterceptTouchEvent(true)
             if ((event.action and MotionEvent.ACTION_MASK) == MotionEvent.ACTION_UP) {
                 view.parent.requestDisallowInterceptTouchEvent(false)
+                view.performClick()
             }
             return@setOnTouchListener false
         }
-
 
         return v
     }
@@ -84,15 +85,15 @@ open class BaseRecipeEditorFragment: Fragment() {
 
         val states = arrayOf(
             intArrayOf(android.R.attr.state_checked),
-            intArrayOf(-android.R.attr.state_checked)
+            intArrayOf(-android.R.attr.state_checked),
         )
         val bgColors = intArrayOf(
             androidx.core.content.ContextCompat.getColor(requireContext(), R.color.colorPrimary),
-            androidx.core.content.ContextCompat.getColor(requireContext(), R.color.cat_badge_bg)
+            androidx.core.content.ContextCompat.getColor(requireContext(), R.color.cat_badge_bg),
         )
         val textColors = intArrayOf(
             androidx.core.content.ContextCompat.getColor(requireContext(), R.color.white),
-            androidx.core.content.ContextCompat.getColor(requireContext(), R.color.cat_badge_txt)
+            androidx.core.content.ContextCompat.getColor(requireContext(), R.color.cat_badge_txt),
         )
         val bgStateList = android.content.res.ColorStateList(states, bgColors)
         val textStateList = android.content.res.ColorStateList(states, textColors)
@@ -144,9 +145,8 @@ open class BaseRecipeEditorFragment: Fragment() {
     }
 
     protected fun getIngredients(): List<String> {
-        return ingredientsViews.map {
+        return ingredientsViews.asSequence().map {
             it.getIngredient()
-        }.filter { it.isNotEmpty() }
+        }.filter { it.isNotEmpty() }.toList()
     }
-
 }

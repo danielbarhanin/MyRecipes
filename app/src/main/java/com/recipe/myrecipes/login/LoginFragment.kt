@@ -1,11 +1,11 @@
 package com.recipe.myrecipes.login
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -14,27 +14,42 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.recipe.myrecipes.R
+import com.recipe.myrecipes.USER_ID
 
-
-class LoginFragment: Fragment() {
+@Suppress("DEPRECATION")
+class LoginFragment : Fragment() {
 
     private lateinit var loginButton: View
+    private lateinit var termsTextView: View
 
     private lateinit var auth: FirebaseAuth
     private lateinit var mGoogleSignInClient: GoogleSignInClient
-    val RC_SIGN_IN: Int = 20
+
+    private val googleSignInLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult(),
+    ) { result ->
+        val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+        try {
+            val account = task.result
+            firebaseAuth(account.idToken)
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         val v = inflater.inflate(R.layout.fragment_login, container, false)
 
         loginButton = v.findViewById(R.id.LoginButton)
+        termsTextView = v.findViewById(R.id.termsTextView)
 
         ViewCompat.setOnApplyWindowInsetsListener(v.findViewById(R.id.loginRoot)) { view, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -54,44 +69,40 @@ class LoginFragment: Fragment() {
         loginButton.setOnClickListener {
             googleSignIn()
         }
+
+        termsTextView.setOnClickListener {
+            showTermsDialog()
+        }
+
         return v
     }
 
     private fun googleSignIn() {
-        val intent = mGoogleSignInClient.signInIntent
-        startActivityForResult(intent, RC_SIGN_IN)
+        googleSignInLauncher.launch(mGoogleSignInClient.signInIntent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == RC_SIGN_IN) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-
-            try {
-                val account = task.result
-                firebaseAuth(account.idToken)
-
-
-            } catch (e: Exception) {
-                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
-            }
-        }
+    private fun showTermsDialog() {
+        MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog_Rounded)
+            .setTitle(R.string.terms_dialog_title)
+            .setMessage(R.string.terms_dialog_content)
+            .setPositiveButton(R.string.terms_agree_button, null)
+            .show()
     }
 
     private fun firebaseAuth(idToken: String?) {
         val credentials = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credentials).addOnCompleteListener{ task ->
-             if (task.isSuccessful) {
-                 val user = auth.currentUser
-                 val user_id: String = user?.uid ?: String()
+        auth.signInWithCredential(credentials).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val user = auth.currentUser
+                val userId: String = user?.uid ?: ""
 
-                 findNavController().navigate(R.id.action_loginFragment_to_recipesFragment, bundleOf("user_id" to user_id))
-
-             } else {
-                 Toast.makeText(requireContext(), getString(R.string.login_error), Toast.LENGTH_LONG).show()
-             }
+                findNavController().navigate(
+                    R.id.action_loginFragment_to_recipesFragment,
+                    bundleOf(USER_ID to userId),
+                )
+            } else {
+                Toast.makeText(requireContext(), getString(R.string.login_error), Toast.LENGTH_LONG).show()
+            }
         }
     }
-
 }

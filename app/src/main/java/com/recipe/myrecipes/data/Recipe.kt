@@ -28,22 +28,22 @@ data class Recipe(
     val urlLink: String,
     val viewOrder: Int = 0,
     val category: String = Category.MAIN_COURSE.name,
-    val isReadOnly: Boolean = false
-): Parcelable {
+    val isReadOnly: Boolean = false,
+) : Parcelable {
 
     fun getCategoryEnum(): Category {
         return Category.fromName(category)
     }
 
     fun getRecipeString(context: Context): String {
-        return "*${name}*\n\n" +
+        return "*$name*\n\n" +
                 "*${context.getString(R.string.select_category)}:* ${context.getString(getCategoryEnum().stringResId)}\n\n" +
                 "*${context.getString(R.string.ingredients)}*\n${getIngredientsString()}\n\n" +
-                "*${context.getString(R.string.instructions)}*\n${instructions}\n" +
+                "*${context.getString(R.string.instructions)}*\n$instructions\n" +
                 "\n $urlLink"
     }
 
-    private fun getIngredientsString() : String {
+    private fun getIngredientsString(): String {
         var ingredientStr = ""
         for (ingredient in ingredients) {
             ingredientStr += "- $ingredient\n"

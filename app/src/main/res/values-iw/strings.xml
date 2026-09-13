@@ -12,6 +12,10 @@
     // Home page
     <string name="my_recipes">המתכונים שלי</string>
     <string name="search_bar">חפש</string>
+    <string name="nav_home">דף הבית</string>
+    <string name="no_recipes_found">לא נמצאו מתכונים</string>
+    <string name="no_recipes_subtitle">נסה לבחור קטגוריה אחרת או להוסיף מתכון חדש!</string>
+    <string name="no_recipes_under_category">אין מתכונים בקטגוריית %1$s</string>
 
     // Categories
     <string name="category_all">הכל</string>
@@ -56,5 +60,11 @@
     <string name="logout">התנתק</string>
     <string name="logout_confirm_title">התנתקות</string>
     <string name="logout_confirm_body">האם ברצונך להתנתק?</string>
+
+    <!-- Terms and Conditions -->
+    <string name="terms_and_conditions">תנאי שימוש</string>
+    <string name="terms_dialog_title">תנאי שימוש</string>
+    <string name="terms_dialog_content">ברוכים הבאים ל-My Recipes!\n\nבעצם השימוש באפליקציה, הנך מסכים לתנאים הבאים:\n\n1. נראות ציבורית של מתכונים:\nכל מתכון שתעלה (כולל שם, מצרכים, הוראות הכנה וקישורים) יהיה גלוי ומשותף לכל משתמשי האפליקציה בלשונית \"גלה עוד\".\n\n2. חשבון משתמש ונתונים:\nהמתכונים השמורים שלך מקושרים לחשבונך בבטחה.\n\n3. הנחיות תוכן:\nעל המשתמשים להימנע מהעלאת תוכן פוגעני או לא הולם.\n\n4. שינוי תנאים:\nתנאים אלו עשויים להתעדכן מעת לעת. המשך השימוש באפליקציה מהווה הסכמה לתנאים המעודכנים.</string>
+    <string name="terms_agree_button">הבנתי</string>
 
 </resources>

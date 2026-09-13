@@ -1,10 +1,15 @@
 package com.recipe.myrecipes.recipe_page
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.*
+import android.webkit.WebChromeClient
+import android.webkit.WebResourceError
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.ProgressBar
 import androidx.activity.addCallback
 import androidx.appcompat.widget.AppCompatImageView
@@ -21,10 +26,11 @@ class RecipeWebFragment : Fragment() {
     private lateinit var progressloader: ProgressBar
     private lateinit var webView: WebView
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         val v = inflater.inflate(R.layout.fragment_recipe_link_webview, container, false)
 
@@ -50,7 +56,7 @@ class RecipeWebFragment : Fragment() {
                 override fun onReceivedError(
                     view: WebView?,
                     request: WebResourceRequest?,
-                    error: WebResourceError?
+                    error: WebResourceError?,
                 ) {
                     progressloader.isVisible = false
                 }

@@ -1,15 +1,19 @@
 package com.recipe.myrecipes.editor_recipe
 
 import android.content.Context
+import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.LinearLayoutCompat
 import com.recipe.myrecipes.R
 
-class IngredientView(
+class IngredientView @JvmOverloads constructor(
     context: Context,
-    val position: Int): LinearLayoutCompat(context) {
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+    val position: Int = 0,
+) : LinearLayoutCompat(context, attrs, defStyleAttr) {
 
     var onDeleteIngredient: ((Int) -> Unit)? = null
 
@@ -23,8 +27,7 @@ class IngredientView(
         }
     }
 
-    fun getIngredient() = ingredientNameEditText.text.toString()
+    fun getIngredient(): String = ingredientNameEditText.text.toString()
 
     fun initializeIngredient(ingredientStr: String) = ingredientNameEditText.setText(ingredientStr)
-
 }

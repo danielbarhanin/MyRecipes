@@ -12,13 +12,13 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.getValue
 import java.util.UUID
 
-
-
-class RecipeViewModel: ViewModel() {
+class RecipeViewModel : ViewModel() {
     val recipes: MutableLiveData<List<Recipe>> = MutableLiveData<List<Recipe>>()
     val exploreRecipes: MutableLiveData<List<Recipe>> = MutableLiveData<List<Recipe>>()
+    val isLoadingRecipes: MutableLiveData<Boolean> = MutableLiveData<Boolean>(true)
+    val isLoadingExplore: MutableLiveData<Boolean> = MutableLiveData<Boolean>(true)
 
-    val database = FirebaseDatabase.getInstance(DATABASE_URL_TEST)
+    val database: FirebaseDatabase = FirebaseDatabase.getInstance(DATABASE_URL_TEST)
 
     private val userId: String = FirebaseAuth.getInstance().currentUser?.uid ?: ""
 
@@ -29,119 +29,141 @@ class RecipeViewModel: ViewModel() {
             INSTRUCTIONS to recipe.instructions,
             URL_LINK to recipe.urlLink,
             VIEW_ORDER to recipe.viewOrder,
-            CATEGORY to recipe.category
+            CATEGORY to recipe.category,
         )
     }
 
     private fun toRecipes(dataSnapshot: DataSnapshot): List<Recipe> {
-        val recipes: MutableList<Recipe> = mutableListOf()
+        val recipesList: MutableList<Recipe> = mutableListOf()
 
         for (recipeData in dataSnapshot.children) {
             val id = recipeData.key ?: UUID.randomUUID().toString()
 
-            recipes.add(
+            val ingredientsList: List<String> = when (val rawIngredients = recipeData.child(INGREDIENTS).value) {
+                is List<*> -> rawIngredients.mapNotNull { it?.toString() }
+                is String -> listOf(rawIngredients)
+                else -> emptyList()
+            }
+
+            recipesList.add(
                 Recipe(
                     id = id,
-                    ingredients = recipeData.child(INGREDIENTS).getValue<List<String>>() ?: listOf(),
+                    ingredients = ingredientsList,
                     name = recipeData.child(NAME).getValue<String>() ?: "",
                     instructions = recipeData.child(INSTRUCTIONS).getValue<String>() ?: "",
                     urlLink = recipeData.child(URL_LINK).getValue<String>() ?: "",
                     viewOrder = recipeData.child(VIEW_ORDER).getValue<Int>() ?: 0,
-                    category = recipeData.child(CATEGORY).getValue<String>() ?: Category.MAIN_COURSE.name
-                )
+                    category = recipeData.child(CATEGORY).getValue<String>() ?: Category.MAIN_COURSE.name,
+                ),
             )
         }
 
+        return recipesList
+    }
+
+    fun getRecipes(): LiveData<List<Recipe>> {
+        if (userId.isEmpty()) {
+            recipes.postValue(emptyList())
+            isLoadingRecipes.postValue(false)
+            return recipes
+        }
+
+        isLoadingRecipes.postValue(true)
+        database.getReference("$ROOT/$userId")
+            .addValueEventListener(
+                object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            recipes.postValue(toRecipes(dataSnapshot))
+                        } else {
+                            recipes.postValue(emptyList())
+                        }
+                        isLoadingRecipes.postValue(false)
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        isLoadingRecipes.postValue(false)
+                    }
+                },
+            )
         return recipes
     }
 
-   fun getRecipes(): LiveData<List<Recipe>> {
-       database.getReference("$ROOT/$userId")
-           .addValueEventListener(object : ValueEventListener {
-               override fun onDataChange(dataSnapshot: DataSnapshot) {
-                   if (dataSnapshot.exists()) {
-                       recipes.postValue(toRecipes(dataSnapshot))
-                   }
-               }
+    fun getExploreRecipes(): LiveData<List<Recipe>> {
+        isLoadingExplore.postValue(true)
+        database.getReference(ROOT)
+            .addValueEventListener(
+                object : ValueEventListener {
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (dataSnapshot.exists()) {
+                            val myRecipeIds = recipes.value?.asSequence()?.map { it.id }?.toSet() ?: emptySet()
+                            val myRecipeNames = recipes.value?.asSequence()?.map { it.name.trim().lowercase() }?.toSet() ?: emptySet()
 
-               override fun onCancelled(error: DatabaseError) {}
-           }
-       )
-       return recipes
-   }
+                            val exploreList: MutableList<Recipe> = mutableListOf()
+                            for (userSnapshot in dataSnapshot.children) {
+                                val otherUserId = userSnapshot.key
+                                if ((otherUserId != null) && (otherUserId != userId)) {
+                                    for (recipeData in userSnapshot.children) {
+                                        val id = recipeData.key ?: UUID.randomUUID().toString()
+                                        val name = recipeData.child(NAME).getValue<String>() ?: ""
 
-   fun getExploreRecipes(): LiveData<List<Recipe>> {
-       database.getReference(ROOT)
-           .addValueEventListener(object : ValueEventListener {
-               override fun onDataChange(dataSnapshot: DataSnapshot) {
-                   if (dataSnapshot.exists()) {
-                       val myRecipeIds = recipes.value?.map { it.id }?.toSet() ?: emptySet()
-                       val myRecipeNames = recipes.value?.map { it.name.trim().lowercase() }?.toSet() ?: emptySet()
+                                        if ((id !in myRecipeIds) && (name.trim().lowercase() !in myRecipeNames)) {
+                                            val ingredientsList: List<String> = when (val rawIngredients = recipeData.child(INGREDIENTS).value) {
+                                                is List<*> -> rawIngredients.mapNotNull { it?.toString() }
+                                                is String -> listOf(rawIngredients)
+                                                else -> emptyList()
+                                            }
 
-                       val exploreList: MutableList<Recipe> = mutableListOf()
-                       for (userSnapshot in dataSnapshot.children) {
-                           val otherUserId = userSnapshot.key
-                           if (otherUserId != null && otherUserId != userId) {
-                               for (recipeData in userSnapshot.children) {
-                                   val id = recipeData.key ?: UUID.randomUUID().toString()
-                                   val name = recipeData.child(NAME).getValue<String>() ?: ""
+                                            exploreList.add(
+                                                Recipe(
+                                                    id = id,
+                                                    ingredients = ingredientsList,
+                                                    name = name,
+                                                    instructions = recipeData.child(INSTRUCTIONS).getValue<String>() ?: "",
+                                                    urlLink = recipeData.child(URL_LINK).getValue<String>() ?: "",
+                                                    viewOrder = recipeData.child(VIEW_ORDER).getValue<Int>() ?: 0,
+                                                    category = recipeData.child(CATEGORY).getValue<String>() ?: Category.MAIN_COURSE.name,
+                                                    isReadOnly = true,
+                                                ),
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                            exploreRecipes.postValue(
+                                exploreList
+                                    .asSequence()
+                                    .distinctBy { it.id }
+                                    .distinctBy { it.name.trim().lowercase() }
+                                    .sortedWith(compareBy({ it.getCategoryEnum().ordinal }, { it.name.lowercase() }))
+                                    .toList(),
+                            )
+                        } else {
+                            exploreRecipes.postValue(emptyList())
+                        }
+                        isLoadingExplore.postValue(false)
+                    }
 
-                                   if (id !in myRecipeIds && name.trim().lowercase() !in myRecipeNames) {
-                                       exploreList.add(
-                                           Recipe(
-                                               id = id,
-                                               ingredients = recipeData.child(INGREDIENTS).getValue<List<String>>() ?: listOf(),
-                                               name = name,
-                                               instructions = recipeData.child(INSTRUCTIONS).getValue<String>() ?: "",
-                                               urlLink = recipeData.child(URL_LINK).getValue<String>() ?: "",
-                                               viewOrder = recipeData.child(VIEW_ORDER).getValue<Int>() ?: 0,
-                                               category = recipeData.child(CATEGORY).getValue<String>() ?: Category.MAIN_COURSE.name,
-                                               isReadOnly = true
-                                           )
-                                       )
-                                   }
-                               }
-                           }
-                       }
-                       exploreRecipes.postValue(
-                           exploreList
-                               .distinctBy { it.id }
-                               .distinctBy { it.name.trim().lowercase() }
-                               .sortedWith(compareBy({ it.getCategoryEnum().ordinal }, { it.name.lowercase() }))
-                       )
-                   } else {
-                       exploreRecipes.postValue(emptyList())
-                   }
-               }
+                    override fun onCancelled(error: DatabaseError) {
+                        isLoadingExplore.postValue(false)
+                    }
+                },
+            )
+        return exploreRecipes
+    }
 
-               override fun onCancelled(error: DatabaseError) {}
-           })
-       return exploreRecipes
-   }
+    fun addRecipe(recipe: Recipe): Task<Void> {
+        val rootRef = database.getReference(ROOT)
+        return rootRef.child(userId).child(UUID.randomUUID().toString()).setValue(getRecipeMap(recipe))
+    }
 
-   fun addRecipe(recipe: Recipe): Task<Void> {
-       val rootRef = database.getReference(ROOT)
+    fun updateRecipe(recipe: Recipe): Task<Void> {
+        val rootRef = database.getReference(ROOT)
+        return rootRef.child(userId).child(recipe.id).updateChildren(getRecipeMap(recipe))
+    }
 
-       return rootRef.child(userId).child(UUID.randomUUID().toString()).setValue(getRecipeMap(recipe))
-   }
-
-   fun updateRecipe(recipe: Recipe): Task<Void> {
-       val rootRef = database.getReference(ROOT)
-
-       return rootRef.child(userId).child(recipe.id).updateChildren(getRecipeMap(recipe))
-   }
-    fun deleteRecipe(recipe: Recipe): Task<Void>  {
+    fun deleteRecipe(recipe: Recipe): Task<Void> {
         val rootRef = database.getReference("$ROOT/$userId")
-
-        val mTask: Task<Void>
-        // Don't delete the whole reference of userId
-        if (recipes.value?.size == 1) {
-            mTask = rootRef.child(recipe.id).setValue(null)
-            rootRef.setValue("")
-        } else {
-            mTask =  rootRef.child(recipe.id).removeValue()
-        }
-
-        return mTask
+        return rootRef.child(recipe.id).removeValue()
     }
 }

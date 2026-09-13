@@ -19,15 +19,15 @@ import com.recipe.myrecipes.data.Recipe
 import com.recipe.myrecipes.data.RecipeViewModel
 
 sealed class RecipeItem {
-    data class Instructions(val body: String): RecipeItem()
-    data class Link(val recipe: Recipe): RecipeItem()
-    data class Ingredients(val ingredients: List<String>): RecipeItem()
+    data class Instructions(val body: String) : RecipeItem()
+    data class Link(val recipe: Recipe) : RecipeItem()
+    data class Ingredients(val ingredients: List<String>) : RecipeItem()
 }
 
-class RecipePageFragment: Fragment() {
+class RecipePageFragment : Fragment() {
 
     private val args by navArgs<RecipePageFragmentArgs>()
-    private lateinit var  recipeViewModel: RecipeViewModel
+    private lateinit var recipeViewModel: RecipeViewModel
 
     private lateinit var recipeName: AppCompatTextView
     private lateinit var categoryBadge: AppCompatTextView
@@ -41,7 +41,7 @@ class RecipePageFragment: Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         val v = inflater.inflate(R.layout.fragment_recipe_page, container, false)
 
@@ -103,6 +103,6 @@ class RecipePageFragment: Fragment() {
         intent.type = "text/plain"
         intent.putExtra(Intent.EXTRA_TEXT, args.recipeItems.getRecipeString(requireContext()))
 
-        requireActivity().startActivity(Intent.createChooser(intent, "Shared the recipe.."))
+        requireActivity().startActivity(Intent.createChooser(intent, "Share the recipe.."))
     }
 }
