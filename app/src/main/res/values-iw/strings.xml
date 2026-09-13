@@ -13,6 +13,14 @@
     <string name="my_recipes">המתכונים שלי</string>
     <string name="search_bar">חפש</string>
 
+    // Categories
+    <string name="category_all">הכל</string>
+    <string name="category_salads">סלטים</string>
+    <string name="category_soups">מרקים</string>
+    <string name="category_main_course">מנות עיקריות</string>
+    <string name="category_desserts">קינוחים</string>
+    <string name="select_category">בחר קטגוריה</string>
+
     // Update recipe
     <string name="update_recipe_name">עדכן את שם המתכון</string>
     <string name="update_ingredients">עדכן מצרכים</string>
@@ -42,5 +50,10 @@
     // Login Screen
     <string name="login">התחבר</string>
     <string name="login_error">משהו השתבש, נסה שנית</string>
+    <string name="sign_in_google">התחבר עם Google</string>
+    <string name="login_subtitle">ספר המתכונים האישי שלך</string>
+    <string name="logout">התנתק</string>
+    <string name="logout_confirm_title">התנתקות</string>
+    <string name="logout_confirm_body">האם ברצונך להתנתק?</string>
 
 </resources>

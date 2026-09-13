@@ -9,8 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.AppCompatEditText
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -18,8 +18,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.tabs.TabLayout
+import com.google.firebase.auth.FirebaseAuth
 import com.recipe.myrecipes.R
+import com.recipe.myrecipes.data.Category
 import com.recipe.myrecipes.data.Recipe
 import com.recipe.myrecipes.data.RecipeViewModel
 
@@ -31,12 +36,15 @@ class RecipesFragment: Fragment() {
 
     private lateinit var  recipeViewModel: RecipeViewModel
 
+    private lateinit var logoutButton: AppCompatImageView
     private lateinit var searchBar: AppCompatEditText
+    private lateinit var categoryTabLayout: TabLayout
     private lateinit var recipesRecyclerView: RecyclerView
     private lateinit var recipesAdapter: RecipesAdapter
     private lateinit var addRecipeButton: FloatingActionButton
     private var lastScrollPosition = 0
     private var top = -1
+    private var selectedCategoryTag: String? = null
 
     private var textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
@@ -87,28 +95,66 @@ class RecipesFragment: Fragment() {
             }
         })
 
+        val itemTouchHelper = createItemTouchHelper()
+
         recipesAdapter = RecipesAdapter(
             onDeleteRecipeCallback = { recipe ->
                 showDeleteRecipeAlert(recipe)
             },
             onChangingOrder = { recipes ->
                 updateRecipesOrder(recipes)
+            },
+            onStartDrag = { viewHolder ->
+                itemTouchHelper.startDrag(viewHolder)
             }
         )
         recipesAdapter.stateRestorationPolicy = RecyclerView.Adapter.StateRestorationPolicy.PREVENT_WHEN_EMPTY
         recipesRecyclerView.adapter = recipesAdapter
 
-        recipeViewModel.getRecipes().observe(viewLifecycleOwner) { recipes ->
-            recipesAdapter.setData(recipes.sortedBy { it.viewOrder })
+        itemTouchHelper.attachToRecyclerView(recipesRecyclerView)
+
+        initCategoryTabs()
+
+        logoutButton.setOnClickListener {
+            showLogoutConfirmationDialog()
+        }
+
+        recipeViewModel.getRecipes().observe(viewLifecycleOwner) {
+            filterData(searchBar.text?.toString() ?: "")
         }
 
         createItemTouchHelper().attachToRecyclerView(recipesRecyclerView)
     }
 
     private fun View.initViews() {
+        logoutButton = findViewById(R.id.logoutButton)
         searchBar = findViewById(R.id.searchBar)
+        categoryTabLayout = findViewById(R.id.categoryTabLayout)
         recipesRecyclerView = findViewById(R.id.recipesRecyclerView)
         addRecipeButton = findViewById(R.id.addRecipeButton)
+    }
+
+    private fun initCategoryTabs() {
+        categoryTabLayout.removeAllTabs()
+        val allTab = categoryTabLayout.newTab().setText(R.string.category_all)
+        allTab.tag = null
+        categoryTabLayout.addTab(allTab)
+
+        for (category in Category.entries) {
+            val tab = categoryTabLayout.newTab().setText(category.stringResId)
+            tab.tag = category.name
+            categoryTabLayout.addTab(tab)
+        }
+
+        categoryTabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                selectedCategoryTag = tab?.tag as? String
+                filterData(searchBar.text?.toString() ?: "")
+            }
+
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
     }
 
     override fun onPause() {
@@ -124,12 +170,18 @@ class RecipesFragment: Fragment() {
 
     private fun createItemTouchHelper(): ItemTouchHelper {
        return ItemTouchHelper(object: ItemTouchHelper.SimpleCallback(ItemTouchHelper.DOWN or ItemTouchHelper.UP, 0) {
+           override fun isLongPressDragEnabled(): Boolean = false
+
            override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
-                (recyclerView.adapter as RecipesAdapter).onChangingOrder(viewHolder.adapterPosition, target.adapterPosition)
+                val fromPos = viewHolder.bindingAdapterPosition
+                val toPos = target.bindingAdapterPosition
+                if (fromPos != RecyclerView.NO_POSITION && toPos != RecyclerView.NO_POSITION) {
+                    (recyclerView.adapter as RecipesAdapter).onChangingOrder(fromPos, toPos)
+                }
                 return true
             }
 
@@ -142,11 +194,14 @@ class RecipesFragment: Fragment() {
         })
     }
 
-    private fun filterData(query: String) {
-        recipeViewModel.recipes.value?.let {
-            recipesAdapter.setData(
-                it.filter { query.lowercase() in it.name.lowercase() }
-            )
+    private fun filterData(query: String = searchBar.text?.toString() ?: "") {
+        recipeViewModel.recipes.value?.let { list ->
+            val filtered = list.filter { recipe ->
+                val matchesCategory = selectedCategoryTag == null || recipe.category.equals(selectedCategoryTag, ignoreCase = true)
+                val matchesQuery = query.isBlank() || query.lowercase() in recipe.name.lowercase()
+                matchesCategory && matchesQuery
+            }
+            recipesAdapter.setData(filtered.sortedBy { it.viewOrder })
         }
     }
 
@@ -160,24 +215,41 @@ class RecipesFragment: Fragment() {
     }
 
     private fun showDeleteRecipeAlert(recipe: Recipe) {
-        val builder = AlertDialog.Builder(requireContext()).apply {
-            setPositiveButton(getString(R.string.delete_alert_positive_button)) { _, _ ->
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog_Rounded)
+            .setTitle(String.format(getString(R.string.delete_alert_title), recipe.name))
+            .setMessage(String.format(getString(R.string.delete_alert_body), recipe.name))
+            .setPositiveButton(getString(R.string.delete_alert_positive_button)) { _, _ ->
                 deleteRecipe(recipe)
             }
-            setNegativeButton(R.string.delete_alert_negative_button) { _, _ ->
+            .setNegativeButton(getString(R.string.delete_alert_negative_button), null)
+            .show()
+    }
 
+    private fun showLogoutConfirmationDialog() {
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext(), R.style.MaterialAlertDialog_Rounded)
+            .setTitle(R.string.logout_confirm_title)
+            .setMessage(R.string.logout_confirm_body)
+            .setPositiveButton(getString(R.string.delete_alert_positive_button)) { _, _ ->
+                performLogout()
             }
-            setTitle(String.format(getString(R.string.delete_alert_title), recipe.name))
-            setMessage(String.format(getString(R.string.delete_alert_body), recipe.name))
-        }
+            .setNegativeButton(getString(R.string.delete_alert_negative_button), null)
+            .show()
+    }
 
-        builder.create().show()
+    private fun performLogout() {
+        FirebaseAuth.getInstance().signOut()
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestIdToken(getString(R.string.default_web_client_id))
+            .requestEmail()
+            .build()
+        GoogleSignIn.getClient(requireContext(), gso).signOut().addOnCompleteListener {
+            findNavController().navigate(R.id.action_recipesFragment_to_loginFragment)
+        }
     }
 
     private fun updateRecipesOrder(recipes: List<Recipe>) {
         recipes.forEachIndexed { idx, recipe ->
-            recipeViewModel.updateRecipe(Recipe(recipe.id, recipe.ingredients, recipe.name,
-            recipe.instructions, recipe.urlLink, idx))
+            recipeViewModel.updateRecipe(recipe.copy(viewOrder = idx))
 
             // if its the last index
             if (idx == recipes.size - 1) {
