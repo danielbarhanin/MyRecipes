@@ -4,10 +4,10 @@
     <selectionStates>
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-09-13T15:37:51.457778Z">
+        <DropdownSelection timestamp="2026-09-28T15:55:31.633032Z">
           <Target type="DEFAULT_BOOT">
             <handle>
-              <DeviceId pluginId="PhysicalDevice" identifier="serial=46221FDAP008JG" />
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=RFCY320W4ZM" />
             </handle>
           </Target>
         </DropdownSelection>
@@ -19,6 +19,13 @@
       </SelectionState>
       <SelectionState runConfigName="main">
         <option name="selectionMode" value="DROPDOWN" />
+        <DropdownSelection timestamp="2026-09-28T15:55:31.633032Z">
+          <Target type="DEFAULT_BOOT">
+            <handle>
+              <DeviceId pluginId="PhysicalDevice" identifier="serial=RFCY320W4ZM" />
+            </handle>
+          </Target>
+        </DropdownSelection>
         <DialogSelection />
       </SelectionState>
       <SelectionState runConfigName="androidTest">

@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "455518764193-m1fnu18uiivkrvv5ovrst50joe1ojsim.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.daniel.myrecipes.app",
+            "certificate_hash": "8dd6fd6606e1c2c5c3ec8454faee53a4879e3c0b"
+          }
+        },
+        {
+          "client_id": "455518764193-qjc8kp8a72r11srmm8jd0ahu6mkq55lp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.daniel.myrecipes.app",
+            "certificate_hash": "74b907b2ddbf5fdcc29fc0f9691aa428a1132a26"
+          }
+        },
+        {
           "client_id": "455518764193-b2jmg9grnvafgthd0fkhbqjnetftn2bf.apps.googleusercontent.com",
           "client_type": 3
         }
