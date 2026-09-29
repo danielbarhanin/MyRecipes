@@ -1,8 +1,8 @@
-package com.recipe.myrecipes.data
+package com.daniel.myrecipes.app.data
 
 import android.content.Context
 import android.os.Parcelable
-import com.recipe.myrecipes.R
+import com.daniel.myrecipes.app.R
 import kotlinx.parcelize.Parcelize
 
 enum class Category(val stringResId: Int, val iconResId: Int, val svgAssetFileName: String) {

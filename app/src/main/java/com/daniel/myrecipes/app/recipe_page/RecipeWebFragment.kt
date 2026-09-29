@@ -1,4 +1,4 @@
-package com.recipe.myrecipes.recipe_page
+package com.daniel.myrecipes.app.recipe_page
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -17,7 +17,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.recipe.myrecipes.R
+import com.daniel.myrecipes.app.R
 
 class RecipeWebFragment : Fragment() {
 

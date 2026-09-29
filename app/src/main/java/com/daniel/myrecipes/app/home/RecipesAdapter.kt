@@ -1,4 +1,4 @@
-package com.recipe.myrecipes.home
+package com.daniel.myrecipes.app.home
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -13,8 +13,8 @@ import android.widget.ImageView
 import coil.decode.SvgDecoder
 import coil.dispose
 import coil.load
-import com.recipe.myrecipes.R
-import com.recipe.myrecipes.data.Recipe
+import com.daniel.myrecipes.app.R
+import com.daniel.myrecipes.app.data.Recipe
 import java.util.Collections
 
 sealed class HomeListItem {

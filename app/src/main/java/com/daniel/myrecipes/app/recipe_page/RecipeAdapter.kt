@@ -1,4 +1,4 @@
-package com.recipe.myrecipes.recipe_page
+package com.daniel.myrecipes.app.recipe_page
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,12 +9,12 @@ import androidx.appcompat.widget.LinearLayoutCompat
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.recipe.myrecipes.R
-import com.recipe.myrecipes.data.Recipe
-import com.recipe.myrecipes.recipe_page.RecipeAdapter.ViewType.IMAGE
-import com.recipe.myrecipes.recipe_page.RecipeAdapter.ViewType.INGREDIENTS
-import com.recipe.myrecipes.recipe_page.RecipeAdapter.ViewType.INSTRUCTIONS
-import com.recipe.myrecipes.recipe_page.RecipeAdapter.ViewType.LINK
+import com.daniel.myrecipes.app.R
+import com.daniel.myrecipes.app.data.Recipe
+import com.daniel.myrecipes.app.recipe_page.RecipeAdapter.ViewType.IMAGE
+import com.daniel.myrecipes.app.recipe_page.RecipeAdapter.ViewType.INGREDIENTS
+import com.daniel.myrecipes.app.recipe_page.RecipeAdapter.ViewType.INSTRUCTIONS
+import com.daniel.myrecipes.app.recipe_page.RecipeAdapter.ViewType.LINK
 
 class RecipeAdapter(private val recipeItems: MutableList<RecipeItem>) : RecyclerView.Adapter<RecipeItemViewHolder>() {
 

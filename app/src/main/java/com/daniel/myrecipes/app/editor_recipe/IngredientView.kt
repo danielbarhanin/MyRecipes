@@ -1,4 +1,4 @@
-package com.recipe.myrecipes.editor_recipe
+package com.daniel.myrecipes.app.editor_recipe
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,7 +6,7 @@ import android.view.LayoutInflater
 import androidx.appcompat.widget.AppCompatEditText
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.LinearLayoutCompat
-import com.recipe.myrecipes.R
+import com.daniel.myrecipes.app.R
 
 class IngredientView @JvmOverloads constructor(
     context: Context,

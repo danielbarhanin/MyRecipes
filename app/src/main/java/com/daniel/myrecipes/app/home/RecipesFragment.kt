@@ -1,4 +1,4 @@
-package com.recipe.myrecipes.home
+package com.daniel.myrecipes.app.home
 
 import android.content.Context
 import android.content.res.ColorStateList
@@ -35,10 +35,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout
 import com.google.firebase.auth.FirebaseAuth
-import com.recipe.myrecipes.R
-import com.recipe.myrecipes.data.Category
-import com.recipe.myrecipes.data.Recipe
-import com.recipe.myrecipes.data.RecipeViewModel
+import com.daniel.myrecipes.app.R
+import com.daniel.myrecipes.app.data.Category
+import com.daniel.myrecipes.app.data.Recipe
+import com.daniel.myrecipes.app.data.RecipeViewModel
 
 const val LAST_VIEW_ORDER = "lastViewOrder"
 const val LAST_SCROLL_POSITION = "lastScrollPosition"

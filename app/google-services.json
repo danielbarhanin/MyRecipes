@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "455518764193-5j6dead5t9vu0h7mpmnrt0qqcknk13eg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.daniel.myrecipes.app",
+            "certificate_hash": "e6f41b0e2011cb847c92553e8d25228367f74416"
+          }
+        },
+        {
+          "client_id": "455518764193-bf6h3ds7ssh5a3ngehferrls5glhrbpi.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.daniel.myrecipes.app",
+            "certificate_hash": "3a873a11c69c0aef1adef799a78da177192edce6"
+          }
+        },
+        {
           "client_id": "455518764193-m1fnu18uiivkrvv5ovrst50joe1ojsim.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
@@ -27,43 +43,6 @@
           "client_type": 1,
           "android_info": {
             "package_name": "com.daniel.myrecipes.app",
-            "certificate_hash": "74b907b2ddbf5fdcc29fc0f9691aa428a1132a26"
-          }
-        },
-        {
-          "client_id": "455518764193-b2jmg9grnvafgthd0fkhbqjnetftn2bf.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDBeHoHZZwIex6Ow7643yzza-IPbYIfzbk"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "455518764193-b2jmg9grnvafgthd0fkhbqjnetftn2bf.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:455518764193:android:5ff1fc60b30c9f8c7844e0",
-        "android_client_info": {
-          "package_name": "com.recipe.myrecipes"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "455518764193-67rek289f4lhnmvcota3afc6j61jesgg.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.recipe.myrecipes",
             "certificate_hash": "74b907b2ddbf5fdcc29fc0f9691aa428a1132a26"
           }
         },

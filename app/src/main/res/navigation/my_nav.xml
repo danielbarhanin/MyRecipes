@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/recipesFragment"
-        android:name="com.recipe.myrecipes.home.RecipesFragment"
+        android:name="com.daniel.myrecipes.app.home.RecipesFragment"
         android:label="RecipesFragment" >
         <action
             android:id="@+id/action_recipesFragment_to_addRecipeFragment"
@@ -22,7 +22,7 @@
     </fragment>
     <fragment
         android:id="@+id/addRecipeFragment"
-        android:name="com.recipe.myrecipes.editor_recipe.AddRecipeFragment"
+        android:name="com.daniel.myrecipes.app.editor_recipe.AddRecipeFragment"
         android:label="AddRecipeFragment" >
         <action
             android:id="@+id/action_addRecipeFragment_to_recipesFragment"
@@ -30,14 +30,14 @@
     </fragment>
     <fragment
         android:id="@+id/recipePageFragment"
-        android:name="com.recipe.myrecipes.recipe_page.RecipePageFragment"
+        android:name="com.daniel.myrecipes.app.recipe_page.RecipePageFragment"
         android:label="recipePageFragment">
         <action
             android:id="@+id/action_fragmentRecipe_to_recipesFragment"
             app:destination="@id/recipesFragment" />
         <argument
             android:name="recipeItems"
-            app:argType="com.recipe.myrecipes.data.Recipe" />
+            app:argType="com.daniel.myrecipes.app.data.Recipe" />
         <action
             android:id="@+id/action_recipePageFragment_to_recipeWebFragment"
             app:destination="@id/recipeWebFragment" />
@@ -47,29 +47,29 @@
     </fragment>
     <fragment
         android:id="@+id/recipeWebFragment"
-        android:name="com.recipe.myrecipes.recipe_page.RecipeWebFragment"
+        android:name="com.daniel.myrecipes.app.recipe_page.RecipeWebFragment"
         android:label="RecipeWebFragment" >
         <action
             android:id="@+id/action_recipeWebFragment_to_recipePageFragment"
             app:destination="@id/recipePageFragment" />
         <argument
             android:name="recipe"
-            app:argType="com.recipe.myrecipes.data.Recipe" />
+            app:argType="com.daniel.myrecipes.app.data.Recipe" />
     </fragment>
     <fragment
         android:id="@+id/updateRecipeFragment"
-        android:name="com.recipe.myrecipes.editor_recipe.UpdateRecipeFragment"
+        android:name="com.daniel.myrecipes.app.editor_recipe.UpdateRecipeFragment"
         android:label="UpdateRecipeFragment" >
         <action
             android:id="@+id/action_updateRecipeFragment_to_recipePageFragment"
             app:destination="@id/recipePageFragment" />
         <argument
             android:name="recipe"
-            app:argType="com.recipe.myrecipes.data.Recipe" />
+            app:argType="com.daniel.myrecipes.app.data.Recipe" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.recipe.myrecipes.login.LoginFragment"
+        android:name="com.daniel.myrecipes.app.login.LoginFragment"
         android:label="LoginFragment" >
         <action
             android:id="@+id/action_loginFragment_to_recipesFragment"

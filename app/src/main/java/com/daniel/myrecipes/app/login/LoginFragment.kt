@@ -1,6 +1,7 @@
-package com.recipe.myrecipes.login
+package com.daniel.myrecipes.app.login
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,11 +15,13 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import com.recipe.myrecipes.R
-import com.recipe.myrecipes.USER_ID
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.daniel.myrecipes.app.R
+import com.daniel.myrecipes.app.USER_ID
 
 @Suppress("DEPRECATION")
 class LoginFragment : Fragment() {
@@ -37,7 +40,11 @@ class LoginFragment : Fragment() {
             val account = task.result
             firebaseAuth(account.idToken)
         } catch (e: Exception) {
-            Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+            val statusCode = (e as? ApiException)?.statusCode ?: -1
+            val errorMsg = "Sign-In Error [Code: $statusCode]: ${e.message}"
+            Log.e("LoginError", errorMsg, e)
+            FirebaseCrashlytics.getInstance().recordException(e)
+            Toast.makeText(requireContext(), errorMsg, Toast.LENGTH_LONG).show()
         }
     }
 
@@ -101,7 +108,10 @@ class LoginFragment : Fragment() {
                     bundleOf(USER_ID to userId),
                 )
             } else {
-                Toast.makeText(requireContext(), getString(R.string.login_error), Toast.LENGTH_LONG).show()
+                val err = task.exception?.message ?: "Unknown auth error"
+                Log.e("FirebaseAuthError", err, task.exception)
+                task.exception?.let { FirebaseCrashlytics.getInstance().recordException(it) }
+                Toast.makeText(requireContext(), "Firebase Auth Error: $err", Toast.LENGTH_LONG).show()
             }
         }
     }

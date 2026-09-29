@@ -1,6 +1,6 @@
-package com.recipe.myrecipes.data
+package com.daniel.myrecipes.app.data
 
-const val APPLICATION_ID: String = "1:455518764193:android:5ff1fc60b30c9f8c7844e0"
+const val APPLICATION_ID: String = "1:455518764193:android:9de5e35b50427d1b7844e0"
 const val API_KEY: String = "AIzaSyDBeHoHZZwIex6Ow7643yzza-IPbYIfzbk"
 const val DATABASE_URL_TEST: String = "https://my-recipes-97d34-default-rtdb.europe-west1.firebasedatabase.app/"
 

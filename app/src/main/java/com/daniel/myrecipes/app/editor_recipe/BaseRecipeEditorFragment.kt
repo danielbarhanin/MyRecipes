@@ -1,4 +1,4 @@
-package com.recipe.myrecipes.editor_recipe
+package com.daniel.myrecipes.app.editor_recipe
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -22,9 +22,9 @@ import coil.load
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
-import com.recipe.myrecipes.R
-import com.recipe.myrecipes.data.Category
-import com.recipe.myrecipes.data.RecipeViewModel
+import com.daniel.myrecipes.app.R
+import com.daniel.myrecipes.app.data.Category
+import com.daniel.myrecipes.app.data.RecipeViewModel
 import java.io.File
 import java.io.FileOutputStream
 

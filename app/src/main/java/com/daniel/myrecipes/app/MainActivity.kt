@@ -1,4 +1,4 @@
-package com.recipe.myrecipes
+package com.daniel.myrecipes.app
 
 import android.os.Bundle
 import android.view.WindowManager
@@ -12,11 +12,11 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.recipe.myrecipes.data.API_KEY
-import com.recipe.myrecipes.data.APPLICATION_ID
-import com.recipe.myrecipes.data.DATABASE_URL_TEST
-import com.recipe.myrecipes.home.LAST_SCROLL_POSITION
-import com.recipe.myrecipes.home.TOP_RECYCLER
+import com.daniel.myrecipes.app.data.API_KEY
+import com.daniel.myrecipes.app.data.APPLICATION_ID
+import com.daniel.myrecipes.app.data.DATABASE_URL_TEST
+import com.daniel.myrecipes.app.home.LAST_SCROLL_POSITION
+import com.daniel.myrecipes.app.home.TOP_RECYCLER
 
 const val USER_ID: String = "UserId"
 

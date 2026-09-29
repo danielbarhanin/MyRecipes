@@ -1,4 +1,4 @@
-package com.recipe.myrecipes.recipe_page
+package com.daniel.myrecipes.app.recipe_page
 
 import android.content.Intent
 import android.os.Bundle
@@ -16,9 +16,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.recipe.myrecipes.R
-import com.recipe.myrecipes.data.Recipe
-import com.recipe.myrecipes.data.RecipeViewModel
+import com.daniel.myrecipes.app.R
+import com.daniel.myrecipes.app.data.Recipe
+import com.daniel.myrecipes.app.data.RecipeViewModel
 
 sealed class RecipeItem {
     data class Image(val imageUrl: String) : RecipeItem()

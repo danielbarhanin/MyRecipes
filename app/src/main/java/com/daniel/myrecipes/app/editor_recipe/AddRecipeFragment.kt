@@ -1,4 +1,4 @@
-package com.recipe.myrecipes.editor_recipe
+package com.daniel.myrecipes.app.editor_recipe
 
 import android.content.Context
 import android.os.Bundle
@@ -12,11 +12,11 @@ import androidx.activity.addCallback
 import androidx.core.content.edit
 import androidx.core.view.contains
 import androidx.navigation.fragment.findNavController
-import com.recipe.myrecipes.R
-import com.recipe.myrecipes.data.Category
-import com.recipe.myrecipes.data.Recipe
-import com.recipe.myrecipes.home.LAST_SELECTED_TAB
-import com.recipe.myrecipes.home.LAST_VIEW_ORDER
+import com.daniel.myrecipes.app.R
+import com.daniel.myrecipes.app.data.Category
+import com.daniel.myrecipes.app.data.Recipe
+import com.daniel.myrecipes.app.home.LAST_SELECTED_TAB
+import com.daniel.myrecipes.app.home.LAST_VIEW_ORDER
 
 class AddRecipeFragment : BaseRecipeEditorFragment() {
 

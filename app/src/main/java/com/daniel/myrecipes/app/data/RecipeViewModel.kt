@@ -1,4 +1,4 @@
-package com.recipe.myrecipes.data
+package com.daniel.myrecipes.app.data
 
 import android.net.Uri
 import androidx.lifecycle.LiveData

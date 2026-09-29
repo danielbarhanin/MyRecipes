@@ -6,5 +6,5 @@
 -keepattributes Signature, *Annotation*, InnerClasses, EnclosingMethod
 
 # Keep Firebase Realtime Database and Auth data model classes
--keep class com.recipe.myrecipes.data.** { *; }
--keepclassmembers class com.recipe.myrecipes.data.** { *; }
+-keep class com.daniel.myrecipes.app.data.** { *; }
+-keepclassmembers class com.daniel.myrecipes.app.data.** { *; }

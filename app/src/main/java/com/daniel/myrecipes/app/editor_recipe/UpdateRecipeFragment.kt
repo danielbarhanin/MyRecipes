@@ -1,4 +1,4 @@
-package com.recipe.myrecipes.editor_recipe
+package com.daniel.myrecipes.app.editor_recipe
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,8 +10,8 @@ import androidx.activity.addCallback
 import androidx.core.view.contains
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.recipe.myrecipes.R
-import com.recipe.myrecipes.data.Recipe
+import com.daniel.myrecipes.app.R
+import com.daniel.myrecipes.app.data.Recipe
 
 class UpdateRecipeFragment : BaseRecipeEditorFragment() {
 
