@@ -10,7 +10,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.getValue
 import com.google.firebase.storage.FirebaseStorage
 import java.util.UUID
 
@@ -52,12 +51,12 @@ class RecipeViewModel : ViewModel() {
                 Recipe(
                     id = id,
                     ingredients = ingredientsList,
-                    name = recipeData.child(NAME).getValue<String>() ?: "",
-                    instructions = recipeData.child(INSTRUCTIONS).getValue<String>() ?: "",
-                    urlLink = recipeData.child(URL_LINK).getValue<String>() ?: "",
-                    viewOrder = recipeData.child(VIEW_ORDER).getValue<Int>() ?: 0,
-                    category = recipeData.child(CATEGORY).getValue<String>() ?: Category.MAIN_COURSE.name,
-                    imageUrl = recipeData.child(IMAGE_URL).getValue<String>() ?: "",
+                    name = recipeData.child(NAME).getValue(String::class.java) ?: "",
+                    instructions = recipeData.child(INSTRUCTIONS).getValue(String::class.java) ?: "",
+                    urlLink = recipeData.child(URL_LINK).getValue(String::class.java) ?: "",
+                    viewOrder = recipeData.child(VIEW_ORDER).getValue(Int::class.java) ?: 0,
+                    category = recipeData.child(CATEGORY).getValue(String::class.java) ?: Category.MAIN_COURSE.name,
+                    imageUrl = recipeData.child(IMAGE_URL).getValue(String::class.java) ?: "",
                 ),
             )
         }
@@ -109,7 +108,7 @@ class RecipeViewModel : ViewModel() {
                                 if ((otherUserId != null) && (otherUserId != userId)) {
                                     for (recipeData in userSnapshot.children) {
                                         val id = recipeData.key ?: UUID.randomUUID().toString()
-                                        val name = recipeData.child(NAME).getValue<String>() ?: ""
+                                        val name = recipeData.child(NAME).getValue(String::class.java) ?: ""
 
                                         if ((id !in myRecipeIds) && (name.trim().lowercase() !in myRecipeNames)) {
                                             val ingredientsList: List<String> = when (val rawIngredients = recipeData.child(INGREDIENTS).value) {
@@ -123,12 +122,12 @@ class RecipeViewModel : ViewModel() {
                                                     id = id,
                                                     ingredients = ingredientsList,
                                                     name = name,
-                                                    instructions = recipeData.child(INSTRUCTIONS).getValue<String>() ?: "",
-                                                    urlLink = recipeData.child(URL_LINK).getValue<String>() ?: "",
-                                                    viewOrder = recipeData.child(VIEW_ORDER).getValue<Int>() ?: 0,
-                                                    category = recipeData.child(CATEGORY).getValue<String>() ?: Category.MAIN_COURSE.name,
+                                                    instructions = recipeData.child(INSTRUCTIONS).getValue(String::class.java) ?: "",
+                                                    urlLink = recipeData.child(URL_LINK).getValue(String::class.java) ?: "",
+                                                    viewOrder = recipeData.child(VIEW_ORDER).getValue(Int::class.java) ?: 0,
+                                                    category = recipeData.child(CATEGORY).getValue(String::class.java) ?: Category.MAIN_COURSE.name,
                                                     isReadOnly = true,
-                                                    imageUrl = recipeData.child(IMAGE_URL).getValue<String>() ?: "",
+                                                    imageUrl = recipeData.child(IMAGE_URL).getValue(String::class.java) ?: "",
                                                 ),
                                             )
                                         }
